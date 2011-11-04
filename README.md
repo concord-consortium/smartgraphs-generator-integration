@@ -12,7 +12,9 @@ To get started:
           * **Important**: `mkdir -p smartgraphs-generator/node_modules/.bin`. This prevents sc-server from borking on the convenience symlink `nbin` in the root of smartgraphs-generator.
   * Before running Bundler (below), put Smartgraphs into the directory frameworks/Smartgraphs.
       * If you are developing your local Smartgraphs repo, you can symlink it:
-          * `ln -s ../Smartgraphs frameworks/smartgraphs`
+          * `cd frameworks`
+          * `ln -s ../../Smartgraphs Smartgraphs`
+          * `cd ..`
       * If you want a fresh checkout of Smartgraphs (for example on a CI server) set it up in frameworks/Smartgraphs:
           * `git clone http://github.com/concord-consortium/Smartgraphs.git frameworks/Smartgraphs`
           * `cd frameworks/Smartgraphs`
