@@ -2,3 +2,5 @@
 .bundle/
 bin/
 tmp/
+frameworks/Smartgraphs/
+smartgraphs-generator/
