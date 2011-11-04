@@ -43,6 +43,27 @@
             }
           }
           return false;
+        },
+        toContainThePoints: function(data) {
+          var coords, dataX, dataY, graphView, x, y, _i, _len, _ref, _ref2, _results;
+          graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
+          _results = [];
+          for (_i = 0, _len = data.length; _i < _len; _i++) {
+            _ref = data[_i], dataX = _ref[0], dataY = _ref[1];
+            _ref2 = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref2.x, y = _ref2.y;
+            _results.push(expect("" + this.actual).toContainAPointAt(x, y));
+          }
+          return _results;
+        },
+        toContainTheTableData: function(data) {
+          var x, y, _i, _len, _ref, _results;
+          _results = [];
+          for (_i = 0, _len = data.length; _i < _len; _i++) {
+            _ref = data[_i], x = _ref[0], y = _ref[1];
+            expect("" + this.actual + " .table-column:first").toHaveTheText(x);
+            _results.push(expect("" + this.actual + " .table-column:last").toHaveTheText(y));
+          }
+          return _results;
         }
       });
     });
@@ -111,7 +132,7 @@
         return expect(aSmartgraphPane).toHaveTheImageUrl('/example.jpg');
       });
     });
-    return describe("when the authored content specifies a graph", function() {
+    describe("when the authored content specifies a graph", function() {
       describe("with no data", function() {
         beforeEach(function() {
           return integrationTestHelper.startAppWithContent({
@@ -231,6 +252,250 @@
             _results.push(expect("" + aSmartgraphPane + " svg").toContainAPointAt(x, y));
           }
           return _results;
+        });
+      });
+    });
+    return describe("when the authored content specifies a table", function() {
+      var aTablePane;
+      aTablePane = "" + aSmartgraphPane + " .smartgraph-table";
+      describe("with no graph", function() {
+        beforeEach(function() {
+          SC.RunLoop.begin();
+          window.authoredActivityJSON = {
+            "_id": "simple-table.df6",
+            "_rev": 1,
+            "data_format_version": 6,
+            "activity": {
+              "title": "Simple Table",
+              "url": "/shared/simple-table",
+              "owner": "shared",
+              "pages": ["/shared/simple-table/page/1-table"],
+              "axes": ["/shared/simple-table/axes/1", "/shared/simple-table/axes/2"]
+            },
+            "pages": [
+              {
+                "name": "Table",
+                "url": "/shared/simple-table/page/1-table",
+                "activity": "/shared/simple-table",
+                "index": 1,
+                "introText": "in this activity....",
+                "steps": ["/shared/simple-table/page/1-table/step/1"],
+                "firstStep": "/shared/simple-table/page/1-table/step/1"
+              }
+            ],
+            "steps": [
+              {
+                "url": "/shared/simple-table/page/1-table/step/1",
+                "activityPage": "/shared/simple-table/page/1-table",
+                "paneConfig": "single",
+                "panes": {
+                  "single": {
+                    "type": "table",
+                    "data": "unordered-1",
+                    "annotations": []
+                  }
+                },
+                "isFinalStep": true,
+                "nextButtonShouldSubmit": true
+              }
+            ],
+            "units": [
+              {
+                "url": "/shared/simple-table/units/meters",
+                "activity": null,
+                "name": "meter",
+                "abbreviation": "m",
+                "pluralName": "meters"
+              }, {
+                "url": "/shared/simple-table/units/minutes",
+                "activity": null,
+                "name": "minute",
+                "abbreviation": "m",
+                "pluralName": "minutes"
+              }
+            ],
+            "axes": [
+              {
+                "url": "/shared/simple-table/axes/1",
+                "units": "/shared/simple-table/units/minutes",
+                "min": 0,
+                "max": 10,
+                "nSteps": 10,
+                "label": "Time"
+              }, {
+                "url": "/shared/simple-table/axes/2",
+                "units": "/shared/simple-table/units/meters",
+                "min": 0,
+                "max": 2000,
+                "nSteps": 10,
+                "label": "Position"
+              }
+            ],
+            "responseTemplates": [],
+            "tags": [],
+            "variables": [],
+            "datadefs": [
+              {
+                "type": "UnorderedDataPoints",
+                "records": [
+                  {
+                    "url": "/shared/simple-table/datadefs/unordered-1",
+                    "name": "unordered-1",
+                    "activity": "/shared/simple-table",
+                    "xUnits": "/shared/simple-table/units/minutes",
+                    "xLabel": "Time",
+                    "xShortLabel": "Time",
+                    "yUnits": "/shared/simple-table/units/meters",
+                    "yLabel": "Position",
+                    "yShortLabel": "Position",
+                    "points": [[1, 200], [2, 400], [3, 600]]
+                  }
+                ]
+              }
+            ],
+            "annotations": []
+          };
+          integrationTestHelper.startApp();
+          Smartgraphs.statechart.sendAction('loadWindowsAuthoredActivityJSON');
+          return SC.RunLoop.end();
+        });
+        it('should display a table pane', function() {
+          return expect(aTablePane).toBeVisible();
+        });
+        it('should display the authored headings', function() {
+          expect(aTablePane).toHaveTheText("Time (m)");
+          return expect(aTablePane).toHaveTheText("Position (m)");
+        });
+        return it('should display columns with the authored data', function() {
+          var data;
+          expect("" + aTablePane + " .table-column").toExistNTimes(2);
+          data = [[1, 200], [2, 400], [3, 600]];
+          return expect("" + aTablePane).toContainTheTableData(data);
+        });
+      });
+      return describe("with attached graph", function() {
+        beforeEach(function() {
+          SC.RunLoop.begin();
+          window.authoredActivityJSON = {
+            "_id": "simple-graph-with-table.df6",
+            "_rev": 1,
+            "data_format_version": 6,
+            "activity": {
+              "title": "Simple Graph With Table",
+              "url": "/shared/simple-graph-with-table",
+              "owner": "shared",
+              "pages": ["/shared/simple-graph-with-table/page/1-graph"],
+              "axes": ["/shared/simple-graph-with-table/axes/1", "/shared/simple-graph-with-table/axes/2"]
+            },
+            "pages": [
+              {
+                "name": "Graph",
+                "url": "/shared/simple-graph-with-table/page/1-graph",
+                "activity": "/shared/simple-graph-with-table",
+                "index": 1,
+                "introText": "in this activity....",
+                "steps": ["/shared/simple-graph-with-table/page/1-graph/step/1"],
+                "firstStep": "/shared/simple-graph-with-table/page/1-graph/step/1"
+              }
+            ],
+            "steps": [
+              {
+                "url": "/shared/simple-graph-with-table/page/1-graph/step/1",
+                "activityPage": "/shared/simple-graph-with-table/page/1-graph",
+                "paneConfig": "split",
+                "panes": {
+                  "top": {
+                    "type": "graph",
+                    "title": "Position vs. Time",
+                    "xAxis": "/shared/simple-graph-with-table/axes/1",
+                    "yAxis": "/shared/simple-graph-with-table/axes/2",
+                    "data": ["unordered-1"],
+                    "annotations": []
+                  },
+                  "bottom": {
+                    "type": "table",
+                    "data": "unordered-1",
+                    "annotations": []
+                  }
+                },
+                "isFinalStep": true,
+                "nextButtonShouldSubmit": true
+              }
+            ],
+            "units": [
+              {
+                "url": "/shared/simple-graph-with-table/units/meters",
+                "activity": null,
+                "name": "meter",
+                "abbreviation": "m",
+                "pluralName": "meters"
+              }, {
+                "url": "/shared/simple-graph-with-table/units/minutes",
+                "activity": null,
+                "name": "minute",
+                "abbreviation": "m",
+                "pluralName": "minutes"
+              }
+            ],
+            "axes": [
+              {
+                "url": "/shared/simple-graph-with-table/axes/1",
+                "units": "/shared/simple-graph-with-table/units/minutes",
+                "min": 0,
+                "max": 10,
+                "nSteps": 10,
+                "label": "Time"
+              }, {
+                "url": "/shared/simple-graph-with-table/axes/2",
+                "units": "/shared/simple-graph-with-table/units/meters",
+                "min": 0,
+                "max": 2000,
+                "nSteps": 10,
+                "label": "Position"
+              }
+            ],
+            "responseTemplates": [],
+            "tags": [],
+            "variables": [],
+            "datadefs": [
+              {
+                "type": "UnorderedDataPoints",
+                "records": [
+                  {
+                    "url": "/shared/simple-graph-with-table/datadefs/unordered-1",
+                    "name": "unordered-1",
+                    "activity": "/shared/simple-graph-with-table",
+                    "xUnits": "/shared/simple-graph-with-table/units/minutes",
+                    "xLabel": "Time",
+                    "xShortLabel": "Time",
+                    "yUnits": "/shared/simple-graph-with-table/units/meters",
+                    "yLabel": "Position",
+                    "yShortLabel": "Position",
+                    "points": [[1, 200], [2, 400], [3, 600]]
+                  }
+                ]
+              }
+            ],
+            "annotations": []
+          };
+          integrationTestHelper.startApp();
+          Smartgraphs.statechart.sendAction('loadWindowsAuthoredActivityJSON');
+          return SC.RunLoop.end();
+        });
+        it('should display a graph pane and a table pane', function() {
+          expect(aSmartgraphPane).toExistNTimes(3);
+          expect("" + aSmartgraphPane + " svg").toBeVisible();
+          return expect("" + aTablePane).toBeVisible();
+        });
+        it('should display a graph with the authored data', function() {
+          var data;
+          data = [[1, 200], [2, 400], [3, 600]];
+          return expect("" + aSmartgraphPane + " svg").toContainThePoints(data);
+        });
+        return it('should display a table with the authored data', function() {
+          var data;
+          data = [[1, 200], [2, 400], [3, 600]];
+          return expect("" + aTablePane).toContainTheTableData(data);
         });
       });
     });
