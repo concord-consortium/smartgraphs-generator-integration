@@ -13,7 +13,7 @@ To get started:
   * Before running Bundler (below), put Smartgraphs into the directory frameworks/Smartgraphs.
       * If you are developing your local Smartgraphs repo, you can symlink it:
           * `ln -s ../Smartgraphs frameworks/smartgraphs`
-      * If you want a fresh checkout of Smartgraphs (for example on a CI server) set it up in frameworks/Smartgraphs: 
+      * If you want a fresh checkout of Smartgraphs (for example on a CI server) set it up in frameworks/Smartgraphs:
           * `git clone http://github.com/concord-consortium/Smartgraphs.git frameworks/Smartgraphs`
           * `cd frameworks/Smartgraphs`
           * `git submodule update --init --recursive`
@@ -25,6 +25,14 @@ To get started:
   * `bundle install --binstubs` (this should install the same gems that Smartgraphs uses.)
   * You should now be able to run `bin/sc-server` in the root of the project
   * `open http://localhost:4020/static/smartgraphs_generator_integration/en/current/tests.html` to see the test results.
+
+Set up jitter to watch for coffeescript changes:
+
+ * Install node
+ * Install jitter (note: you might want to learn more about npm so you know what this command is doing)
+    * `sudo npm install --global jitter`
+ * run jitter to watch that folder and compile to the parent
+    * `jitter apps/smartgraphs_generator_integration/tests/src/ apps/smartgraphs_generator_integration/tests/compiled/`
 
 Git-committed symlinks (handy to know about if you are developing on Windows:)
 
