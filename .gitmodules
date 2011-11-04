@@ -1,0 +1,3 @@
+[submodule "frameworks/jasmine-sproutcore"]
+	path = frameworks/jasmine-sproutcore
+	url = git://github.com/gmoeck/jasmine-sproutcore
