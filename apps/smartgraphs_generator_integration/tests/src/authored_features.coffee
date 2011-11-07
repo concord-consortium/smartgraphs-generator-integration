@@ -278,14 +278,12 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
         expect(aTablePane).toHaveTheText("Position (m)")
 
       it 'should display a table with the authored data', ->
-        # data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data  // this will work when we use converter
-        data = [[1,200], [2,400], [3,600]]
+        data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data
         expect("#{aTablePane}").toContainTheTableData(data)
 
       it 'should display a graph with the authored data', ->
         expect("#{aTablePane} .table-column").toExistNTimes(2)
-        # data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data  // this will work when we use converter
-        data = [[1,200], [2,400], [3,600]]
+        data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data
         expect("#{aSmartgraphPane} svg").toContainThePoints(data)
 
   describe "when the authored content specifies an instruction sequence", ->

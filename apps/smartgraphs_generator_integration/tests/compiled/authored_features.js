@@ -313,13 +313,13 @@
         });
         it('should display a table with the authored data', function() {
           var data;
-          data = [[1, 200], [2, 400], [3, 600]];
+          data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data;
           return expect("" + aTablePane).toContainTheTableData(data);
         });
         return it('should display a graph with the authored data', function() {
           var data;
           expect("" + aTablePane + " .table-column").toExistNTimes(2);
-          data = [[1, 200], [2, 400], [3, 600]];
+          data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data;
           return expect("" + aSmartgraphPane + " svg").toContainThePoints(data);
         });
       });
