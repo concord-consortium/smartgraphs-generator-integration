@@ -4,3 +4,5 @@ bin/
 tmp/
 frameworks/Smartgraphs
 smartgraphs-generator
+server.log
+server.pid.lock
