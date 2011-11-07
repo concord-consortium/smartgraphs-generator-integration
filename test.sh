@@ -11,6 +11,7 @@ rmdir node_modules/.bin    # i.e., delete only if it's the fake link we made bel
 git stash     # `git reset --hard` would be dangerous on a dev machine
 git fetch
 git checkout origin/master
+git submodule update --init
 # sc-server chokes on the 'nbin' symklink which points at node_modules/.bin/ (populated by 'npm install' on dev machines)
 mkdir -p node_modules/.bin/
 cd ..
@@ -24,10 +25,11 @@ cd frameworks/Smartgraphs
 git stash
 git fetch
 git checkout origin/master
+git submodule update --init --recursive
 cd ../..
 
 git update-server-info --force
-git submodule update --init --recursive
+git submodule update --init
 
 bundle install
 
