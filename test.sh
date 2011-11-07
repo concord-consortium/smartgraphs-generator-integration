@@ -7,9 +7,12 @@ fi
 
 cd smartgraphs-generator
 # make sure we can checkout origin/master cleanly
+rmdir node_modules/.bin    # i.e., delete only if it's the fake link we made below, not a real node_modules/.bin/
 git stash     # `git reset --hard` would be dangerous on a dev machine
 git fetch
 git checkout origin/master
+# sc-server chokes on the 'nbin' symklink which points at node_modules/.bin/ (populated by 'npm install' on dev machines)
+mkdir -p node_modules/.bin/
 cd ..
 
 if [ ! -e frameworks/Smartgraphs ]
