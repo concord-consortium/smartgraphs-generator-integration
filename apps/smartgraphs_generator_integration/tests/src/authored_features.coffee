@@ -221,126 +221,52 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
 
     describe "with attached graph", ->
       beforeEach ->
-        # PENDING we don't have a converter for this yet, so use runtime json
-        SC.RunLoop.begin();
-        window.authoredActivityJSON =
-          {
-            "_id": "simple-graph-with-table.df6",
-            "_rev": 1,
-            "data_format_version": 6,
-            "activity": {
-              "title": "Simple Graph With Table",
-              "url": "/shared/simple-graph-with-table",
-              "owner": "shared",
-              "pages": [
-                "/shared/simple-graph-with-table/page/1-graph"
-              ],
-              "axes": [
-                "/shared/simple-graph-with-table/axes/1",
-                "/shared/simple-graph-with-table/axes/2"
-              ]
-            },
-            "pages": [
-              {
-                "name": "Graph",
-                "url": "/shared/simple-graph-with-table/page/1-graph",
-                "activity": "/shared/simple-graph-with-table",
-                "index": 1,
-                "introText": "in this activity....",
-                "steps": [
-                  "/shared/simple-graph-with-table/page/1-graph/step/1"
-                ],
-                "firstStep": "/shared/simple-graph-with-table/page/1-graph/step/1"
-              }
-            ],
-            "steps": [
-              {
-                "url": "/shared/simple-graph-with-table/page/1-graph/step/1",
-                "activityPage": "/shared/simple-graph-with-table/page/1-graph",
-                "paneConfig": "split",
-                "panes": {
-                  "top": {
-                    "type": "graph",
-                    "title": "Position vs. Time",
-                    "xAxis": "/shared/simple-graph-with-table/axes/1",
-                    "yAxis": "/shared/simple-graph-with-table/axes/2",
-                    "data" : ["unordered-1"],
-                    "annotations": []
-                  },
-                  "bottom": {
-                    "type": "table",
-                    "data": "unordered-1",
-                    "annotations": []
-                  }
+        integrationTestHelper.startAppWithContent
+          "type": "Activity"
+          "name": "Graph and Table"
+          "pages": [
+            {
+              "type": "Page"
+              "name": "Graph"
+              "text": "in this activity...."
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane"
+                  "title": "Position vs. Time"
+                  "yLabel": "Position"
+                  "yUnits": "meters"
+                  "yMin": 0
+                  "yMax": 2000
+                  "yTicks": 10
+                  "xLabel": "Time"
+                  "xUnits": "minutes"
+                  "xMin": 0
+                  "xMax": 10
+                  "xTicks": 10
+                  "data": [
+                    [1,200]
+                    [2,400]
+                    [3,600]
+                  ]
                 },
-                "isFinalStep": true,
-                "nextButtonShouldSubmit": true
-              }
-            ],
-            "units": [
-              {
-                "url": "/shared/simple-graph-with-table/units/meters",
-                "activity": null,
-                "name": "meter",
-                "abbreviation": "m",
-                "pluralName": "meters"
-              },
-              {
-                "url": "/shared/simple-graph-with-table/units/minutes",
-                "activity": null,
-                "name": "minute",
-                "abbreviation": "m",
-                "pluralName": "minutes"
-              }
-            ],
-            "axes": [
-              {
-                "url": "/shared/simple-graph-with-table/axes/1",
-                "units": "/shared/simple-graph-with-table/units/minutes",
-                "min": 0,
-                "max": 10,
-                "nSteps": 10,
-                "label": "Time"
-              },
-              {
-                "url": "/shared/simple-graph-with-table/axes/2",
-                "units": "/shared/simple-graph-with-table/units/meters",
-                "min": 0,
-                "max": 2000,
-                "nSteps": 10,
-                "label": "Position"
-              }
-            ],
-            "responseTemplates": [
-            ],
-            "tags": [
-            ],
-            "variables": [
-            ],
-            "datadefs": [
-              {
-                "type": "UnorderedDataPoints",
-                "records": [
-                  {
-                    "url": "/shared/simple-graph-with-table/datadefs/unordered-1",
-                    "name": "unordered-1",
-                    "activity": "/shared/simple-graph-with-table",
-                    "xUnits": "/shared/simple-graph-with-table/units/minutes",
-                    "xLabel": "Time",
-                    "xShortLabel": "Time",
-                    "yUnits": "/shared/simple-graph-with-table/units/meters",
-                    "yLabel": "Position",
-                    "yShortLabel": "Position",
-                    "points": [[1,200], [2,400], [3,600]]
-                  }
-                ]
-              }
-            ],
-            "annotations": []
-          }
-        integrationTestHelper.startApp()
-        Smartgraphs.statechart.sendAction 'loadWindowsAuthoredActivityJSON'
-        SC.RunLoop.end();
+                {
+                  "type": "TablePane"
+                }
+              ]
+            }
+          ],
+          "units": [
+            {
+              "type": "Unit"
+              "name": "meters"
+              "abbreviation": "m"
+            },
+            {
+              "type": "Unit"
+              "name": "minutes"
+              "abbreviation": "m"
+            }
+          ]
 
       it 'should display a graph pane and a table pane', ->
         expect(aSmartgraphPane).toExistNTimes(3)
