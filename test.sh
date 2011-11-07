@@ -6,6 +6,8 @@ then
 fi
 
 cd smartgraphs-generator
+# make sure we can checkout origin/master cleanly
+git stash     # `git reset --hard` would be dangerous on a dev machine
 git fetch
 git checkout origin/master
 cd ..
@@ -16,6 +18,7 @@ then
 fi
 
 cd frameworks/Smartgraphs
+git stash
 git fetch
 git checkout origin/master
 cd ../..
