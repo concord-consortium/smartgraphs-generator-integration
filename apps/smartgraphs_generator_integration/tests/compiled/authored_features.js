@@ -255,7 +255,7 @@
         });
       });
     });
-    return describe("when the authored content specifies a table", function() {
+    describe("when the authored content specifies a table", function() {
       var aTablePane;
       aTablePane = "" + aSmartgraphPane + " .smartgraph-table";
       return describe("with attached graph", function() {
@@ -322,6 +322,37 @@
           data = [[1, 200], [2, 400], [3, 600]];
           return expect("" + aSmartgraphPane + " svg").toContainThePoints(data);
         });
+      });
+    });
+    return describe("when the authored content specifies an instruction sequence", function() {
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Instruction Sequence",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "in this activity....",
+              "panes": [
+                {
+                  "type": "ImagePane",
+                  "name": "Shoes",
+                  "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg",
+                  "license": "Creative Commons BY-NC-ND 2.0",
+                  "attribution": "image courtesy flickr user altopower"
+                }
+              ],
+              "sequence": {
+                "type": "InstructionSequence",
+                "text": "Click the next button to get started"
+              }
+            }
+          ]
+        });
+      });
+      return it('should display the instruction text in a dialog-text box', function() {
+        return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Click the next button to get started");
       });
     });
   });
