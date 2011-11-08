@@ -6,33 +6,7 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
   aSmartgraphPane = '.smartgraph-pane'
 
   beforeEach ->
-    this.addMatchers
-      toHaveTheText: (text) ->
-        elements = $("#{this.actual}:contains('#{text}'):visible")
-        elements.length > 0
-      toBeEmpty2: ->
-        this.actual.length == 0
-      toHaveTheImageUrl: (url) ->
-        for img in $("#{this.actual} img")
-          return true if SC.View.views[img.id]?.get('value') == url
-        false
-      toExistNTimes: (n) ->
-        $("#{this.actual}").length == n
-      toBeVisible: ->
-        $("#{this.actual}:visible").length > 0
-      toContainAPointAt: (x, y) ->
-        for elem in $("#{this.actual} circle")
-          return true if parseFloat(elem.getAttribute("cx")) == x && parseFloat(elem.getAttribute("cy")) == y
-        false
-      toContainThePoints: (data) ->
-        graphView = Smartgraphs.activityPage.firstGraphPane.graphView
-        for [dataX, dataY] in data
-          {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
-          expect("#{this.actual}").toContainAPointAt(x, y)
-      toContainTheTableData: (data) ->
-        for [x, y] in data
-          expect("#{this.actual} .table-column:first").toHaveTheText(x)
-          expect("#{this.actual} .table-column:last").toHaveTheText(y)
+    integrationTestHelper.addMatchers this
 
   afterEach ->
     integrationTestHelper.teardownApp()

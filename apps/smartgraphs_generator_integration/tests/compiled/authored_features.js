@@ -7,65 +7,7 @@
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
     beforeEach(function() {
-      return this.addMatchers({
-        toHaveTheText: function(text) {
-          var elements;
-          elements = $("" + this.actual + ":contains('" + text + "'):visible");
-          return elements.length > 0;
-        },
-        toBeEmpty2: function() {
-          return this.actual.length === 0;
-        },
-        toHaveTheImageUrl: function(url) {
-          var img, _i, _len, _ref, _ref2;
-          _ref = $("" + this.actual + " img");
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            img = _ref[_i];
-            if (((_ref2 = SC.View.views[img.id]) != null ? _ref2.get('value') : void 0) === url) {
-              return true;
-            }
-          }
-          return false;
-        },
-        toExistNTimes: function(n) {
-          return $("" + this.actual).length === n;
-        },
-        toBeVisible: function() {
-          return $("" + this.actual + ":visible").length > 0;
-        },
-        toContainAPointAt: function(x, y) {
-          var elem, _i, _len, _ref;
-          _ref = $("" + this.actual + " circle");
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            elem = _ref[_i];
-            if (parseFloat(elem.getAttribute("cx")) === x && parseFloat(elem.getAttribute("cy")) === y) {
-              return true;
-            }
-          }
-          return false;
-        },
-        toContainThePoints: function(data) {
-          var coords, dataX, dataY, graphView, x, y, _i, _len, _ref, _ref2, _results;
-          graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
-          _results = [];
-          for (_i = 0, _len = data.length; _i < _len; _i++) {
-            _ref = data[_i], dataX = _ref[0], dataY = _ref[1];
-            _ref2 = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref2.x, y = _ref2.y;
-            _results.push(expect("" + this.actual).toContainAPointAt(x, y));
-          }
-          return _results;
-        },
-        toContainTheTableData: function(data) {
-          var x, y, _i, _len, _ref, _results;
-          _results = [];
-          for (_i = 0, _len = data.length; _i < _len; _i++) {
-            _ref = data[_i], x = _ref[0], y = _ref[1];
-            expect("" + this.actual + " .table-column:first").toHaveTheText(x);
-            _results.push(expect("" + this.actual + " .table-column:last").toHaveTheText(y));
-          }
-          return _results;
-        }
-      });
+      return integrationTestHelper.addMatchers(this);
     });
     afterEach(function() {
       return integrationTestHelper.teardownApp();
