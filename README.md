@@ -34,7 +34,7 @@ Set up jitter to watch for coffeescript changes:
  * Install jitter (note: you might want to learn more about npm so you know what this command is doing)
     * `sudo npm install --global jitter`
  * run jitter to watch that folder and compile to the parent
-    * `jitter apps/smartgraphs_generator_integration/tests/src/ apps/smartgraphs_generator_integration/tests/compiled/`
+    * `jitter apps/smartgraphs_generator_integration/src apps/smartgraphs_generator_integration`
 
 Git-committed symlinks (handy to know about if you are developing on Windows:)
 
