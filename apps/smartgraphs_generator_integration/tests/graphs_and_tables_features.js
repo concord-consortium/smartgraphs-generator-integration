@@ -12,68 +12,6 @@
     afterEach(function() {
       return integrationTestHelper.teardownApp();
     });
-    describe("when the authored content specifies two pages", function() {
-      beforeEach(function() {
-        return integrationTestHelper.startAppWithContent({
-          "type": "Activity",
-          "name": "Maria’s Run",
-          "pages": [
-            {
-              "type": "Page",
-              "name": "Introduction",
-              "text": "in this activity...."
-            }, {
-              "type": "Page",
-              "name": "Where did she stop",
-              "text": "look at the graph..."
-            }
-          ]
-        });
-      });
-      it("should have the specified first page text initially", function() {
-        return expect(aSmartgraphPane).toHaveTheText('in this activity....');
-      });
-      return describe("after you click on the 'Next' button", function() {
-        beforeEach(function() {
-          return integrationTestHelper.clickButton('Next');
-        });
-        it("should have the specified second page text", function() {
-          return expect(aSmartgraphPane).toHaveTheText('look at the graph...');
-        });
-        return it("should have not have a visible 'Next' button", function() {
-          var nextButton;
-          nextButton = $(".sc-button-view:contains('Next'):visible");
-          return expect(nextButton).toBeEmpty2();
-        });
-      });
-    });
-    describe("when the authored content specifies a page with an image pane", function() {
-      beforeEach(function() {
-        return integrationTestHelper.startAppWithContent({
-          "type": "Activity",
-          "name": "Maria’s Run",
-          "pages": [
-            {
-              "type": "Page",
-              "name": "Introduction",
-              "text": "in this activity....",
-              "panes": [
-                {
-                  "type": "ImagePane",
-                  "name": "Shoes",
-                  "url": "/example.jpg",
-                  "license": "Creative Commons BY-NC-ND 2.0",
-                  "attribution": "image courtesy flickr user altopower"
-                }
-              ]
-            }
-          ]
-        });
-      });
-      return it("should have a pane with the specified image url", function() {
-        return expect(aSmartgraphPane).toHaveTheImageUrl('/example.jpg');
-      });
-    });
     describe("when the authored content specifies a graph", function() {
       describe("with no data", function() {
         beforeEach(function() {
@@ -232,7 +170,7 @@
         });
       });
     });
-    describe("when the authored content specifies a table", function() {
+    return describe("when the authored content specifies a table", function() {
       var aTablePane;
       aTablePane = "" + aSmartgraphPane + " .smartgraph-table";
       return describe("with attached graph", function() {
@@ -299,37 +237,6 @@
           data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data;
           return expect("" + aSmartgraphPane + " svg").toContainThePoints(data);
         });
-      });
-    });
-    return describe("when the authored content specifies an instruction sequence", function() {
-      beforeEach(function() {
-        return integrationTestHelper.startAppWithContent({
-          "type": "Activity",
-          "name": "Instruction Sequence",
-          "pages": [
-            {
-              "type": "Page",
-              "name": "Introduction",
-              "text": "in this activity....",
-              "panes": [
-                {
-                  "type": "ImagePane",
-                  "name": "Shoes",
-                  "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg",
-                  "license": "Creative Commons BY-NC-ND 2.0",
-                  "attribution": "image courtesy flickr user altopower"
-                }
-              ],
-              "sequence": {
-                "type": "InstructionSequence",
-                "text": "Click the next button to get started"
-              }
-            }
-          ]
-        });
-      });
-      return it('should display the instruction text in a dialog-text box', function() {
-        return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Click the next button to get started");
       });
     });
   });

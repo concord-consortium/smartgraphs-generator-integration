@@ -11,64 +11,6 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
   afterEach ->
     integrationTestHelper.teardownApp()
 
-  describe "when the authored content specifies two pages", ->
-    beforeEach ->
-      integrationTestHelper.startAppWithContent
-        "type": "Activity",
-        "name": "Maria’s Run",
-        "pages": [
-          {
-            "type": "Page",
-            "name": "Introduction",
-            "text": "in this activity...."
-          },
-          {
-            "type": "Page",
-            "name": "Where did she stop",
-            "text": "look at the graph..."
-          }
-        ]
-
-    it "should have the specified first page text initially", ->
-      expect(aSmartgraphPane).toHaveTheText 'in this activity....'
-
-    describe "after you click on the 'Next' button", ->
-      beforeEach ->
-        integrationTestHelper.clickButton 'Next'
-
-      it "should have the specified second page text", ->
-        expect(aSmartgraphPane).toHaveTheText 'look at the graph...'
-
-      it "should have not have a visible 'Next' button", ->
-        nextButton = $(".sc-button-view:contains('Next'):visible")
-        expect(nextButton).toBeEmpty2()
-
-
-  describe "when the authored content specifies a page with an image pane", ->
-    beforeEach ->
-      integrationTestHelper.startAppWithContent
-        "type": "Activity"
-        "name": "Maria’s Run"
-        "pages": [
-          {
-            "type": "Page"
-            "name": "Introduction"
-            "text": "in this activity...."
-            "panes": [
-              {
-                "type": "ImagePane"
-                "name": "Shoes"
-                "url": "/example.jpg"
-                "license": "Creative Commons BY-NC-ND 2.0"
-                "attribution": "image courtesy flickr user altopower"
-              }
-            ]
-          }
-        ]
-
-    it "should have a pane with the specified image url", ->
-      expect(aSmartgraphPane).toHaveTheImageUrl '/example.jpg'
-
   describe "when the authored content specifies a graph", ->
 
     describe "with no data", ->
@@ -296,33 +238,3 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
         expect("#{aTablePane} .table-column").toExistNTimes(2)
         data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data
         expect("#{aSmartgraphPane} svg").toContainThePoints(data)
-
-  describe "when the authored content specifies an instruction sequence", ->
-
-    beforeEach ->
-      integrationTestHelper.startAppWithContent
-        "type": "Activity"
-        "name": "Instruction Sequence"
-        "pages": [
-          {
-            "type": "Page"
-            "name": "Introduction"
-            "text": "in this activity...."
-            "panes": [
-              {
-                "type": "ImagePane"
-                "name": "Shoes"
-                "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg"
-                "license": "Creative Commons BY-NC-ND 2.0"
-                "attribution": "image courtesy flickr user altopower"
-              }
-            ]
-            "sequence": {
-              "type": "InstructionSequence"
-              "text": "Click the next button to get started"
-            }
-          }
-        ]
-
-    it 'should display the instruction text in a dialog-text box', ->
-      expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Click the next button to get started"
