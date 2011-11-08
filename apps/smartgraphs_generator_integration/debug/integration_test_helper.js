@@ -9,6 +9,7 @@ integrationTestHelper = SC.Object.create({
   startApp: function() {
     // Run the full app main method which would normally happen on page load
     SC.RunLoop.begin();
+    Smartgraphs.statechart.set('trace', NO);
     Smartgraphs.main();
     // the statechart needs a little push, since it only goes automatically to START when it actually initializes
     // (i.e., only the first time startApp() executes. In a test, we call startApp many times.)
