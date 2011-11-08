@@ -215,6 +215,43 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
           {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
           expect("#{aSmartgraphPane} svg").toContainAPointAt(x, y)
 
+    describe "with no units", ->
+      beforeEach ->
+        integrationTestHelper.startAppWithContent
+          "type": "Activity"
+          "name": "Simple Graph"
+          "pages": [
+            {
+              "type": "Page"
+              "name": "Graph"
+              "text": "in this activity...."
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane"
+                  "title": "Position vs. Time"
+                  "yLabel": "Position"
+                  "yMin": 0
+                  "yMax": 2000
+                  "yTicks": 10
+                  "xLabel": "Time"
+                  "xMin": 0
+                  "xMax": 10
+                  "xTicks": 10
+                  "data": [
+                    [1,200]
+                    [2,400]
+                    [3,600]
+                  ]
+                }
+              ]
+            }
+          ],
+          "units": []
+
+      it "should display a graph with no units", ->
+        expect("#{aSmartgraphPane} svg").toHaveTheText("Position")
+        expect("#{aSmartgraphPane} svg").toHaveTheText("Time")
+
   describe "when the authored content specifies a table", ->
 
     aTablePane = "#{aSmartgraphPane} .smartgraph-table"

@@ -194,7 +194,7 @@
           return expect("" + aSmartgraphPane + " svg circle").toExistNTimes(0);
         });
       });
-      return describe("with canned data", function() {
+      describe("with canned data", function() {
         beforeEach(function() {
           return integrationTestHelper.startAppWithContent({
             "type": "Activity",
@@ -252,6 +252,41 @@
             _results.push(expect("" + aSmartgraphPane + " svg").toContainAPointAt(x, y));
           }
           return _results;
+        });
+      });
+      return describe("with no units", function() {
+        beforeEach(function() {
+          return integrationTestHelper.startAppWithContent({
+            "type": "Activity",
+            "name": "Simple Graph",
+            "pages": [
+              {
+                "type": "Page",
+                "name": "Graph",
+                "text": "in this activity....",
+                "panes": [
+                  {
+                    "type": "PredefinedGraphPane",
+                    "title": "Position vs. Time",
+                    "yLabel": "Position",
+                    "yMin": 0,
+                    "yMax": 2000,
+                    "yTicks": 10,
+                    "xLabel": "Time",
+                    "xMin": 0,
+                    "xMax": 10,
+                    "xTicks": 10,
+                    "data": [[1, 200], [2, 400], [3, 600]]
+                  }
+                ]
+              }
+            ],
+            "units": []
+          });
+        });
+        return it("should display a graph with no units", function() {
+          expect("" + aSmartgraphPane + " svg").toHaveTheText("Position");
+          return expect("" + aSmartgraphPane + " svg").toHaveTheText("Time");
         });
       });
     });
