@@ -73,9 +73,8 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
       toBeVisible: ->
         $("#{this.actual}:visible").length > 0
       toContainAPointAt: (x, y) ->
-        for elem in $("#{this.actual} circle")
-          return true if parseFloat(elem.getAttribute("cx")) == x && parseFloat(elem.getAttribute("cy")) == y
-        false
+        elements = $("#{this.actual} circle[cx='#{x}'][cy='#{y}']")
+        elements.length > 0
       toContainThePoints: (data) ->
         graphView = Smartgraphs.activityPage.firstGraphPane.graphView
         for [dataX, dataY] in data

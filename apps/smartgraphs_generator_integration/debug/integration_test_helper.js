@@ -80,15 +80,9 @@
           return $("" + this.actual + ":visible").length > 0;
         },
         toContainAPointAt: function(x, y) {
-          var elem, _i, _len, _ref;
-          _ref = $("" + this.actual + " circle");
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            elem = _ref[_i];
-            if (parseFloat(elem.getAttribute("cx")) === x && parseFloat(elem.getAttribute("cy")) === y) {
-              return true;
-            }
-          }
-          return false;
+          var elements;
+          elements = $("" + this.actual + " circle[cx='" + x + "'][cy='" + y + "']");
+          return elements.length > 0;
         },
         toContainThePoints: function(data) {
           var coords, dataX, dataY, graphView, x, y, _i, _len, _ref, _ref2, _results;
