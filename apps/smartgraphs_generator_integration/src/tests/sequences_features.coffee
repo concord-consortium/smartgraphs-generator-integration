@@ -1,7 +1,7 @@
 defineJasmineHelpers()
 $ -> $('body').css('overflow', 'auto')
 
-describe "The Smartgraphs runtime, when loading content converted from the authored format", ->
+describe "The Smartgraphs runtime, when loading sequences converted from the authored format", ->
 
   aSmartgraphPane = '.smartgraph-pane'
 

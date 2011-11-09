@@ -3,7 +3,7 @@
   $(function() {
     return $('body').css('overflow', 'auto');
   });
-  describe("The Smartgraphs runtime, when loading content converted from the authored format", function() {
+  describe("The Smartgraphs runtime, when loading graphs and tables converted from the authored format", function() {
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
     beforeEach(function() {
