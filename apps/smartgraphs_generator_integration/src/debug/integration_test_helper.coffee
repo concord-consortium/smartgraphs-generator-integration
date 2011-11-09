@@ -45,6 +45,12 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
   clickButton: (text) ->
     this.simulateClickOnSelector ".sc-button-view:visible:contains('#{text}')"
 
+
+  clickPointAt: (selector, [dataX, dataY]) ->
+    graphView = Smartgraphs.activityPage.firstGraphPane.graphView
+    {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
+    @simulateClickOnSelector "#{selector} circle[cx='#{x}'][cy='#{y}']"
+
   NOOP: ->
 
   # SC.TreeControllers throw exceptions when their content is deleted, so delete observers before destroying records
@@ -61,6 +67,15 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
     jasmine.addMatchers
       toHaveTheText: (text) ->
         elements = $("#{this.actual}:contains('#{text}'):visible")
+        elements.length > 0
+      toHaveTheButton: (text) ->
+        elements = $("#{this.actual} .sc-button-view:visible:contains('#{text}')")
+        elements.length > 0
+      toHaveTheDisabledButton: (text) ->
+        elements = $("#{this.actual} .sc-button-view.disabled:visible:contains('#{text}')")
+        elements.length > 0
+      toHaveTheEnabledButton: (text) ->
+        elements = $("#{this.actual} .sc-button-view:not(.disabled):visible:contains('#{text}')")
         elements.length > 0
       toBeEmpty2: ->
         this.actual.length == 0

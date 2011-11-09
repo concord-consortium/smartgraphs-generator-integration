@@ -40,6 +40,13 @@
     clickButton: function(text) {
       return this.simulateClickOnSelector(".sc-button-view:visible:contains('" + text + "')");
     },
+    clickPointAt: function(selector, _arg) {
+      var coords, dataX, dataY, graphView, x, y, _ref;
+      dataX = _arg[0], dataY = _arg[1];
+      graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
+      _ref = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref.x, y = _ref.y;
+      return this.simulateClickOnSelector("" + selector + " circle[cx='" + x + "'][cy='" + y + "']");
+    },
     NOOP: function() {},
     silentlyClobberRecords: function(store) {
       var record, records, storeKey;
@@ -57,6 +64,21 @@
         toHaveTheText: function(text) {
           var elements;
           elements = $("" + this.actual + ":contains('" + text + "'):visible");
+          return elements.length > 0;
+        },
+        toHaveTheButton: function(text) {
+          var elements;
+          elements = $("" + this.actual + " .sc-button-view:visible:contains('" + text + "')");
+          return elements.length > 0;
+        },
+        toHaveTheDisabledButton: function(text) {
+          var elements;
+          elements = $("" + this.actual + " .sc-button-view.disabled:visible:contains('" + text + "')");
+          return elements.length > 0;
+        },
+        toHaveTheEnabledButton: function(text) {
+          var elements;
+          elements = $("" + this.actual + " .sc-button-view:not(.disabled):visible:contains('" + text + "')");
           return elements.length > 0;
         },
         toBeEmpty2: function() {
