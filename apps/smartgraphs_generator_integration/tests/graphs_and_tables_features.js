@@ -124,7 +124,7 @@
         return it("should display the data points in the authored locations", function() {
           var coords, data, dataX, dataY, graphView, x, y, _i, _len, _ref, _ref2, _results;
           graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
-          data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data;
+          data = integrationTestHelper.graphData();
           _results = [];
           for (_i = 0, _len = data.length; _i < _len; _i++) {
             _ref = data[_i], dataX = _ref[0], dataY = _ref[1];

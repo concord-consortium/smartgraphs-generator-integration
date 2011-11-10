@@ -50,6 +50,9 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
     graphView = Smartgraphs.activityPage.firstGraphPane.graphView
     {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
     @simulateClickOnSelector "#{selector} circle[cx='#{x}'][cy='#{y}']"
+    
+  graphData: ->
+    integrationTestHelper.get('authoredContent').pages[0].panes[0].data
 
   NOOP: ->
 

@@ -126,7 +126,7 @@ describe "The Smartgraphs runtime, when loading graphs and tables converted from
 
       it "should display the data points in the authored locations", ->
         graphView = Smartgraphs.activityPage.firstGraphPane.graphView
-        data = integrationTestHelper.get('authoredContent').pages[0].panes[0].data
+        data = integrationTestHelper.graphData()
         for [dataX, dataY] in data
           {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
           expect("#{aSmartgraphPane} svg").toContainAPointAt(x, y)
