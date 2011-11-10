@@ -46,295 +46,60 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
     describe "with one page", ->
 
       beforeEach ->
-        # load in actual runtime json for now
-        SC.RunLoop.begin()
-        window.authoredActivityJSON =
-            "_id": "pick-a-point-sequence.df6",
-            "_rev": 1,
-            "data_format_version": 6,
-            "activity": {
-              "title": "Pick A Point Sequence",
-              "url": "/shared/pick-a-point-sequence",
-              "owner": "shared",
-              "pages": [
-                "/shared/pick-a-point-sequence/page/1-introduction"
+        integrationTestHelper.startAppWithContent
+          "type": "Activity"
+          "name": "Pick A Point Sequence"
+          "pages": [
+            {
+              "type": "Page"
+              "name": "Introduction"
+              "text": "in this activity...."
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane"
+                  "title": "Position vs. Time"
+                  "yLabel": "Position"
+                  "yMin": 0
+                  "yMax": 2000
+                  "yTicks": 10
+                  "xLabel": "Time"
+                  "xMin": 0
+                  "xMax": 10
+                  "xTicks": 10
+                  "data": [
+                    [1,200]
+                    [2,400]
+                    [3,600]
+                    [4,800]
+                  ]
+                },
+                {
+                  "type": "TablePane"
+                }
               ],
-              "axes": [
-                "/shared/pick-a-point-sequence/axes/1",
-                "/shared/pick-a-point-sequence/axes/2"
-              ]
-            },
-            "pages": [
-              {
-                "name": "Introduction",
-                "url": "/shared/pick-a-point-sequence/page/1-introduction",
-                "activity": "/shared/pick-a-point-sequence",
-                "index": 1,
-                "introText": "in this activity....",
-                "steps": [
-                  "/shared/pick-a-point-sequence/page/1-introduction/step/1",
-                  "/shared/pick-a-point-sequence/page/1-introduction/step/2",
-                  "/shared/pick-a-point-sequence/page/1-introduction/step/3",
-                  "/shared/pick-a-point-sequence/page/1-introduction/step/4",
-                  "/shared/pick-a-point-sequence/page/1-introduction/step/5"
-                ],
-                "firstStep": "/shared/pick-a-point-sequence/page/1-introduction/step/1"
-              }
-            ],
-            "steps": [
-              {
-                "url": "/shared/pick-a-point-sequence/page/1-introduction/step/1",
-                "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
-                "beforeText": "Click the point...",
-                "paneConfig": "split",
-                "panes": {
-                  "top": {
-                    "type": "graph",
-                    "title": "Position vs. Time",
-                    "xAxis": "/shared/pick-a-point-sequence/axes/1",
-                    "yAxis": "/shared/pick-a-point-sequence/axes/2",
-                    "annotations": ["highlighted-point-1"],
-                    "data": [
-                      "datadef-1"
-                    ]
+              "sequence": {
+                "type": "PickAPointSequence",
+                "initialPrompt": "Click the point...",
+                "correctAnswerPoint": [4, 800],
+                "hints": [
+                  {
+                    "name": "1st wrong answer",
+                    "text": "Look at the graph..."
                   },
-                  "bottom": {
-                    "type": "table",
-                    "data": "datadef-1",
-                    "annotations": ["highlighted-point-1"]
+                  {
+                    "name": "2nd wrong answer",
+                    "text": "In these two intervals...."
                   }
+                ],
+                "giveUp": {
+                  "text": "If you look carefully, ...."
                 },
-                "tools": [
-                  {
-                    "name": "tagging",
-                    "setup": {
-                      "tag": "tag-1",
-                      "data": "datadef-1"
-                    }
-                  }
-                ],
-                "submitButtonTitle": "Check My Answer",
-                "responseBranches": [
-                  {
-                    "criterion": ["coordinates=", "tag-1", 4, 800],
-                    "step": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
-                  }
-                ],
-                "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/2",
-                "isFinalStep": false
-              },
-              {
-                "url": "/shared/pick-a-point-sequence/page/1-introduction/step/2",
-                "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
-                "beforeText": "Look at the graph...",
-                "paneConfig": "split",
-                "panes": {
-                  "top": {
-                    "type": "graph",
-                    "title": "Position vs. Time",
-                    "xAxis": "/shared/pick-a-point-sequence/axes/1",
-                    "yAxis": "/shared/pick-a-point-sequence/axes/2",
-                    "annotations": ["highlighted-point-1"],
-                    "data": [
-                      "datadef-1"
-                    ]
-                  },
-                  "bottom": {
-                    "type": "table",
-                    "data": "datadef-1",
-                    "annotations": ["highlighted-point-1"]
-                  }
-                },
-                "tools": [
-                  {
-                    "name": "tagging",
-                    "setup": {
-                      "tag": "tag-1",
-                      "data": "datadef-1"
-                    }
-                  }
-                ],
-                "submitButtonTitle": "Check My Answer",
-                "responseBranches": [
-                  {
-                    "criterion": ["coordinates=", "tag-1", 4, 800],
-                    "step": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
-                  }
-                ],
-                "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/3",
-                "isFinalStep": false
-              },
-              {
-                "url": "/shared/pick-a-point-sequence/page/1-introduction/step/3",
-                "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
-                "beforeText": "In these two intervals....",
-                "paneConfig": "split",
-                "panes": {
-                  "top": {
-                    "type": "graph",
-                    "title": "Position vs. Time",
-                    "xAxis": "/shared/pick-a-point-sequence/axes/1",
-                    "yAxis": "/shared/pick-a-point-sequence/axes/2",
-                    "annotations": ["highlighted-point-1"],
-                    "data": [
-                      "datadef-1"
-                    ]
-                  },
-                  "bottom": {
-                    "type": "table",
-                    "data": "datadef-1",
-                    "annotations": ["highlighted-point-1"]
-                  }
-                },
-                "tools": [
-                  {
-                    "name": "tagging",
-                    "setup": {
-                      "tag": "tag-1",
-                      "data": "datadef-1"
-                    }
-                  }
-                ],
-                "submitButtonTitle": "Check My Answer",
-                "responseBranches": [
-                  {
-                    "criterion": ["coordinates=", "tag-1", 4, 800],
-                    "step": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
-                  }
-                ],
-                "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/4",
-                "isFinalStep": false
-              },
-              {
-                "url": "/shared/pick-a-point-sequence/page/1-introduction/step/4",
-                "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
-                "beforeText": "If you look carefully, ....",
-                "paneConfig": "split",
-                "panes": {
-                  "top": {
-                    "type": "graph",
-                    "title": "Position vs. Time",
-                    "xAxis": "/shared/pick-a-point-sequence/axes/1",
-                    "yAxis": "/shared/pick-a-point-sequence/axes/2",
-                    "annotations": [],
-                    "data": [
-                      "datadef-1"
-                    ]
-                  },
-                  "bottom": {
-                    "type": "table",
-                    "data": "datadef-1",
-                    "annotations": []
-                  }
-                },
-                "nextButtonShouldSubmit": true,
-                "isFinalStep": true
-              },
-              {
-                "url": "/shared/pick-a-point-sequence/page/1-introduction/step/5",
-                "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
-                "beforeText": "Four minutes into her run ....",
-                "paneConfig": "split",
-                "panes": {
-                  "top": {
-                    "type": "graph",
-                    "title": "Position vs. Time",
-                    "xAxis": "/shared/pick-a-point-sequence/axes/1",
-                    "yAxis": "/shared/pick-a-point-sequence/axes/2",
-                    "annotations": [],
-                    "data": [
-                      "datadef-1"
-                    ]
-                  },
-                  "bottom": {
-                    "type": "table",
-                    "data": "datadef-1",
-                    "annotations": []
-                  }
-                },
-                "nextButtonShouldSubmit": true,
-                "isFinalStep": true
+                "confirmCorrect": {
+                  "text": "Four minutes into her run ...."
+                }
               }
-            ],
-            "responseTemplates": [],
-            "axes": [
-              {
-                "url": "/shared/pick-a-point-sequence/axes/1",
-                "min": 0,
-                "max": 10,
-                "nSteps": 10,
-                "label": "Time"
-              },
-              {
-                "url": "/shared/pick-a-point-sequence/axes/2",
-                "min": 0,
-                "max": 2000,
-                "nSteps": 10,
-                "label": "Position"
-              }
-            ],
-            "datadefs": [
-              {
-                "type": "UnorderedDataPoints",
-                "records": [
-                  {
-                    "url": "/shared/pick-a-point-sequence/datadefs/datadef-1",
-                    "name": "datadef-1",
-                    "activity": "/shared/pick-a-point-sequence",
-                    "xLabel": "Time",
-                    "xShortLabel": "Time",
-                    "yLabel": "Position",
-                    "yShortLabel": "Position",
-                    "points": [
-                      [
-                        1,
-                        200
-                      ],
-                      [
-                        2,
-                        400
-                      ],
-                      [
-                        3,
-                        600
-                      ],
-                      [
-                        4,
-                        800
-                      ]
-                    ]
-                  }
-                ]
-              }
-            ],
-            "tags": [
-              {
-                "url": "/shared/pick-a-point-sequence/tags/tag-1",
-                "activity": "/shared/pick-a-point-sequence",
-                "name": "tag-1"
-              }
-            ],
-            "annotations": [
-              {
-                "type": "HighlightedPoint",
-                "records": [
-                  {
-                    "url": "/shared/pick-a-point-sequence/annotations/highlighted-point-1",
-                    "name": "highlighted-point-1",
-                    "activity": "/shared/pick-a-point-sequence",
-                    "datadefName": "datadef-1",
-                    "tag": "/shared/pick-a-point-sequence/tags/tag-1",
-                    "color": "#1f77b4"
-                  }
-                ]
-              }
-            ],
-            "variables": [],
-            "units": []
-
-        integrationTestHelper.startApp()
-        Smartgraphs.statechart.sendAction 'loadWindowsAuthoredActivityJSON'
-        SC.RunLoop.end()
+            }
+          ]
 
       it 'should show the first step initially', ->
         expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Click the point..."
