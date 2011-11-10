@@ -102,3 +102,14 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
         for [x, y] in data
           expect("#{this.actual} .table-column:first").toHaveTheText(x)
           expect("#{this.actual} .table-column:last").toHaveTheText(y)
+      toHaveTheOverlay: (dataPoints, color) ->
+        graphView = Smartgraphs.activityPage.firstGraphPane.graphView
+        path = ""
+        for [dataX, dataY], i in dataPoints
+          {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
+          path += "#{if i == 0 then "M" else "L"}#{x},#{y}"
+
+        console.log "looking for #{this.actual} path[stroke='#{color}'][d='#{path}']"
+        elements = $("#{this.actual} path[stroke='#{color}'][d='#{path}']")
+        console.log elements
+        elements.length > 0

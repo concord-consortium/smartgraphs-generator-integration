@@ -129,6 +129,20 @@
             _results.push(expect("" + this.actual + " .table-column:last").toHaveTheText(y));
           }
           return _results;
+        },
+        toHaveTheOverlay: function(dataPoints, color) {
+          var coords, dataX, dataY, elements, graphView, i, path, x, y, _len, _ref, _ref2;
+          graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
+          path = "";
+          for (i = 0, _len = dataPoints.length; i < _len; i++) {
+            _ref = dataPoints[i], dataX = _ref[0], dataY = _ref[1];
+            _ref2 = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref2.x, y = _ref2.y;
+            path += "" + (i === 0 ? "M" : "L") + x + "," + y;
+          }
+          console.log("looking for " + this.actual + " path[stroke='" + color + "'][d='" + path + "']");
+          elements = $("" + this.actual + " path[stroke='" + color + "'][d='" + path + "']");
+          console.log(elements);
+          return elements.length > 0;
         }
       });
     }
