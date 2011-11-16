@@ -50,7 +50,14 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
     graphView = Smartgraphs.activityPage.firstGraphPane.graphView
     {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
     @simulateClickOnSelector "#{selector} circle[cx='#{x}'][cy='#{y}']"
-    
+
+  typeTextIn: (selector, text) ->
+    target = $(selector)[0]
+    view = SC.View.views[target.name]       #inputs have sc-id set on name instead of id for some reason
+    SC.RunLoop.begin()
+    view.set "value", text
+    SC.RunLoop.end()
+
   graphData: ->
     integrationTestHelper.get('authoredContent').pages[0].panes[0].data
 

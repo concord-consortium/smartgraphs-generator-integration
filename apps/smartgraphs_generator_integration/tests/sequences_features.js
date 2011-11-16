@@ -43,7 +43,7 @@
         return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Click the next button to get started");
       });
     });
-    return describe("when the authored content specifies a pick-a-point sequence", function() {
+    describe("when the authored content specifies a pick-a-point sequence", function() {
       describe("with one page", function() {
         beforeEach(function() {
           return integrationTestHelper.startAppWithContent({
@@ -204,7 +204,7 @@
             integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [1, 200]);
             return integrationTestHelper.clickButton("Check My Answer");
           });
-          it('should show the first range visual prompt after the button is pressed', function() {
+          it('should show the first range visual prompt', function() {
             var data, highlightedPoints;
             data = integrationTestHelper.graphData();
             highlightedPoints = data.slice(0, 3);
@@ -213,6 +213,190 @@
           return describe('when an incorrect point is clicked again', function() {
             beforeEach(function() {
               integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [1, 200]);
+              return integrationTestHelper.clickButton("Check My Answer");
+            });
+            return it('should show the second two range visual prompts', function() {
+              var data, highlightedPoints1, highlightedPoints2;
+              data = integrationTestHelper.graphData();
+              highlightedPoints1 = data.slice(0, 3);
+              expect("" + aSmartgraphPane + " svg").toHaveTheOverlay(highlightedPoints1, "#00ff00");
+              highlightedPoints2 = data.slice(3, 5);
+              return expect("" + aSmartgraphPane + " svg").toHaveTheOverlay(highlightedPoints2, "#0000ff");
+            });
+          });
+        });
+      });
+    });
+    return describe("when the authored content specifies a numeric sequence", function() {
+      describe("with one page", function() {
+        beforeEach(function() {
+          return integrationTestHelper.startAppWithContent({
+            "type": "Activity",
+            "name": "Numeric Sequence",
+            "pages": [
+              {
+                "type": "Page",
+                "name": "Introduction",
+                "text": "in this activity....",
+                "panes": [
+                  {
+                    "type": "PredefinedGraphPane",
+                    "title": "Position vs. Time",
+                    "yLabel": "Position",
+                    "yMin": 0,
+                    "yMax": 2000,
+                    "yTicks": 10,
+                    "xLabel": "Time",
+                    "xMin": 0,
+                    "xMax": 10,
+                    "xTicks": 10,
+                    "data": [[1, 200], [2, 400], [3, 600], [4, 800]]
+                  }, {
+                    "type": "TablePane"
+                  }
+                ],
+                "sequence": {
+                  "type": "NumericSequence",
+                  "initialPrompt": "Enter the answer...",
+                  "correctAnswer": 800,
+                  "hints": [
+                    {
+                      "name": "1st wrong answer",
+                      "text": "Look at the graph..."
+                    }, {
+                      "name": "2nd wrong answer",
+                      "text": "In these two intervals...."
+                    }
+                  ],
+                  "giveUp": {
+                    "text": "If you look carefully, ...."
+                  },
+                  "confirmCorrect": {
+                    "text": "Four minutes into her run ...."
+                  }
+                }
+              }
+            ]
+          });
+        });
+        it('should show the first step initially', function() {
+          return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Enter the answer...");
+        });
+        it('should have a Check Answer button which is disabled', function() {
+          expect("" + aSmartgraphPane).toHaveTheButton("Check My Answer");
+          return expect("" + aSmartgraphPane).toHaveTheDisabledButton("Check My Answer");
+        });
+        describe('when an incorrect answer is entered', function() {
+          beforeEach(function() {
+            return integrationTestHelper.typeTextIn(".dialog-text input", "100");
+          });
+          it('should enable the Check Answer button', function() {
+            return expect("" + aSmartgraphPane).toHaveTheEnabledButton("Check My Answer");
+          });
+          return it('should show the first hint after the button is pressed', function() {
+            integrationTestHelper.clickButton("Check My Answer");
+            return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Look at the graph...");
+          });
+        });
+        return describe('when the correct answer is entered and the button is pressed', function() {
+          beforeEach(function() {
+            integrationTestHelper.typeTextIn(".dialog-text input", "800");
+            return integrationTestHelper.clickButton("Check My Answer");
+          });
+          return it('should show the final step', function() {
+            return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Four minutes into her run ....");
+          });
+        });
+      });
+      return describe("with range visual prompts", function() {
+        beforeEach(function() {
+          return integrationTestHelper.startAppWithContent({
+            "type": "Activity",
+            "name": "Numeric Sequence",
+            "pages": [
+              {
+                "type": "Page",
+                "name": "Introduction",
+                "text": "in this activity....",
+                "panes": [
+                  {
+                    "type": "PredefinedGraphPane",
+                    "title": "Position vs. Time",
+                    "yLabel": "Position",
+                    "yMin": 0,
+                    "yMax": 2000,
+                    "yTicks": 10,
+                    "xLabel": "Time",
+                    "xMin": 0,
+                    "xMax": 10,
+                    "xTicks": 10,
+                    "data": [[1, 200], [2, 400], [3, 600], [4, 800], [5, 1000]]
+                  }, {
+                    "type": "TablePane"
+                  }
+                ],
+                "sequence": {
+                  "type": "NumericSequence",
+                  "initialPrompt": {
+                    "text": "Click the point..."
+                  },
+                  "correctAnswer": 800,
+                  "hints": [
+                    {
+                      "name": "1st wrong answer",
+                      "text": "Look at the graph...",
+                      "visualPrompts": [
+                        {
+                          "type": "RangeVisualPrompt",
+                          "name": "1 to 3",
+                          "xMin": 1,
+                          "xMax": 3,
+                          "color": "#ff0000"
+                        }
+                      ]
+                    }, {
+                      "name": "2nd wrong answer",
+                      "text": "In these two intervals....",
+                      "visualPrompts": [
+                        {
+                          "type": "RangeVisualPrompt",
+                          "name": "Unbounded left",
+                          "xMax": 3,
+                          "color": "#00ff00"
+                        }, {
+                          "type": "RangeVisualPrompt",
+                          "name": "Unbounded right",
+                          "xMin": 4,
+                          "color": "#0000ff"
+                        }
+                      ]
+                    }
+                  ],
+                  "giveUp": {
+                    "text": "If you look carefully, ...."
+                  },
+                  "confirmCorrect": {
+                    "text": "Four minutes into her run ...."
+                  }
+                }
+              }
+            ]
+          });
+        });
+        return describe('when an incorrect answer is entered and check answer is clicked', function() {
+          beforeEach(function() {
+            integrationTestHelper.typeTextIn(".dialog-text input", "100");
+            return integrationTestHelper.clickButton("Check My Answer");
+          });
+          it('should show the first range visual prompt after the button is pressed', function() {
+            var data, highlightedPoints;
+            data = integrationTestHelper.graphData();
+            highlightedPoints = data.slice(0, 3);
+            return expect("" + aSmartgraphPane + " svg").toHaveTheOverlay(highlightedPoints, "#ff0000");
+          });
+          return describe('when an incorrect answer is entered again', function() {
+            beforeEach(function() {
+              integrationTestHelper.typeTextIn(".dialog-text input", "100");
               return integrationTestHelper.clickButton("Check My Answer");
             });
             return it('should show the second two range visual prompts after the button is pressed', function() {

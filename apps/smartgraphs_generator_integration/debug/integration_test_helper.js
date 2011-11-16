@@ -47,6 +47,14 @@
       _ref = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref.x, y = _ref.y;
       return this.simulateClickOnSelector("" + selector + " circle[cx='" + x + "'][cy='" + y + "']");
     },
+    typeTextIn: function(selector, text) {
+      var target, view;
+      target = $(selector)[0];
+      view = SC.View.views[target.name];
+      SC.RunLoop.begin();
+      view.set("value", text);
+      return SC.RunLoop.end();
+    },
     graphData: function() {
       return integrationTestHelper.get('authoredContent').pages[0].panes[0].data;
     },

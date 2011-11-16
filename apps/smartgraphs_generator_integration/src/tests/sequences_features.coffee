@@ -220,7 +220,7 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
           integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
           integrationTestHelper.clickButton "Check My Answer"
 
-        it 'should show the first range visual prompt after the button is pressed', ->
+        it 'should show the first range visual prompt', ->
           data = integrationTestHelper.graphData()
           highlightedPoints = data[0..2]
           expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints, "#ff0000"
@@ -231,7 +231,7 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
             integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
             integrationTestHelper.clickButton "Check My Answer"
 
-          it 'should show the second two range visual prompts after the button is pressed', ->
+          it 'should show the second two range visual prompts', ->
             data = integrationTestHelper.graphData()
             highlightedPoints1 = data[0..2]
             expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints1, "#00ff00"
@@ -308,8 +308,7 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
       describe 'when an incorrect answer is entered', ->
 
         beforeEach ->
-          # TODO enter the wrong value!!
-          # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+          integrationTestHelper.typeTextIn(".dialog-text input", "100")
 
         it 'should enable the Check Answer button', ->
           expect("#{aSmartgraphPane}").toHaveTheEnabledButton "Check My Answer"
@@ -318,12 +317,11 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
           integrationTestHelper.clickButton "Check My Answer"
           expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Look at the graph..."
 
-      describe 'when the correct point is clicked and the button is pressed', ->
+      describe 'when the correct answer is entered and the button is pressed', ->
 
         beforeEach ->
-          # TODO Enter the right value!!
-          # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [4, 800])
-          # integrationTestHelper.clickButton "Check My Answer"
+          integrationTestHelper.typeTextIn(".dialog-text input", "800")
+          integrationTestHelper.clickButton "Check My Answer"
 
         it 'should show the final step', ->
           expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Four minutes into her run ...."
@@ -413,11 +411,10 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
           ]
 
 
-      describe 'when an incorrect point is clicked and check answer is clicked', ->
+      describe 'when an incorrect answer is entered and check answer is clicked', ->
 
         beforeEach ->
-          # TODO Enter incorrect answer!!!
-          # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+          integrationTestHelper.typeTextIn(".dialog-text input", "100")
           integrationTestHelper.clickButton "Check My Answer"
 
         it 'should show the first range visual prompt after the button is pressed', ->
@@ -425,11 +422,10 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
           highlightedPoints = data[0..2]
           expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints, "#ff0000"
 
-        describe 'when an incorrect point is clicked again', ->
+        describe 'when an incorrect answer is entered again', ->
 
           beforeEach ->
-            # TODO Enter incorrect answer!!!
-            # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+            integrationTestHelper.typeTextIn(".dialog-text input", "100")
             integrationTestHelper.clickButton "Check My Answer"
 
           it 'should show the second two range visual prompts after the button is pressed', ->
