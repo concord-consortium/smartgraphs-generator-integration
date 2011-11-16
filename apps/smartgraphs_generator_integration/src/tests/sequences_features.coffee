@@ -237,3 +237,204 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
             expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints1, "#00ff00"
             highlightedPoints2 = data[3..4]
             expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints2, "#0000ff"
+
+  describe "when the authored content specifies a numeric sequence", ->
+
+    describe "with one page", ->
+
+      beforeEach ->
+        integrationTestHelper.startAppWithContent
+          "type": "Activity"
+          "name": "Numeric Sequence"
+          "pages": [
+            {
+              "type": "Page"
+              "name": "Introduction"
+              "text": "in this activity...."
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane"
+                  "title": "Position vs. Time"
+                  "yLabel": "Position"
+                  "yMin": 0
+                  "yMax": 2000
+                  "yTicks": 10
+                  "xLabel": "Time"
+                  "xMin": 0
+                  "xMax": 10
+                  "xTicks": 10
+                  "data": [
+                    [1,200]
+                    [2,400]
+                    [3,600]
+                    [4,800]
+                  ]
+                },
+                {
+                  "type": "TablePane"
+                }
+              ],
+              "sequence": {
+                "type": "NumericSequence",
+                "initialPrompt": "Enter the answer...",
+                "correctAnswer": 800,
+                "hints": [
+                  {
+                    "name": "1st wrong answer",
+                    "text": "Look at the graph..."
+                  },
+                  {
+                    "name": "2nd wrong answer",
+                    "text": "In these two intervals...."
+                  }
+                ],
+                "giveUp": {
+                  "text": "If you look carefully, ...."
+                },
+                "confirmCorrect": {
+                  "text": "Four minutes into her run ...."
+                }
+              }
+            }
+          ]
+
+      it 'should show the first step initially', ->
+        expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Enter the answer..."
+
+      it 'should have a Check Answer button which is disabled', ->
+        expect("#{aSmartgraphPane}").toHaveTheButton "Check My Answer"
+        expect("#{aSmartgraphPane}").toHaveTheDisabledButton "Check My Answer"
+
+      describe 'when an incorrect answer is entered', ->
+
+        beforeEach ->
+          # TODO enter the wrong value!!
+          # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+
+        it 'should enable the Check Answer button', ->
+          expect("#{aSmartgraphPane}").toHaveTheEnabledButton "Check My Answer"
+
+        it 'should show the first hint after the button is pressed', ->
+          integrationTestHelper.clickButton "Check My Answer"
+          expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Look at the graph..."
+
+      describe 'when the correct point is clicked and the button is pressed', ->
+
+        beforeEach ->
+          # TODO Enter the right value!!
+          # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [4, 800])
+          # integrationTestHelper.clickButton "Check My Answer"
+
+        it 'should show the final step', ->
+          expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Four minutes into her run ...."
+
+    describe "with range visual prompts", ->
+
+      beforeEach ->
+        integrationTestHelper.startAppWithContent
+          "type": "Activity"
+          "name": "Numeric Sequence"
+          "pages": [
+            {
+              "type": "Page"
+              "name": "Introduction"
+              "text": "in this activity...."
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane"
+                  "title": "Position vs. Time"
+                  "yLabel": "Position"
+                  "yMin": 0
+                  "yMax": 2000
+                  "yTicks": 10
+                  "xLabel": "Time"
+                  "xMin": 0
+                  "xMax": 10
+                  "xTicks": 10
+                  "data": [
+                    [1,200]
+                    [2,400]
+                    [3,600]
+                    [4,800]
+                    [5,1000]
+                  ]
+                },
+                {
+                  "type": "TablePane"
+                }
+              ],
+              "sequence": {
+                "type": "NumericSequence"
+                "initialPrompt": {
+                  "text": "Click the point..."
+                },
+                "correctAnswer": 800
+                "hints": [
+                  {
+                    "name": "1st wrong answer"
+                    "text": "Look at the graph..."
+                    "visualPrompts": [
+                      {
+                        "type": "RangeVisualPrompt"
+                        "name": "1 to 3"
+                        "xMin": 1
+                        "xMax": 3
+                        "color": "#ff0000"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "2nd wrong answer"
+                    "text": "In these two intervals...."
+                    "visualPrompts": [
+                      {
+                        "type": "RangeVisualPrompt"
+                        "name": "Unbounded left"
+                        "xMax": 3,
+                        "color": "#00ff00"
+                      },
+                      {
+                        "type": "RangeVisualPrompt"
+                        "name": "Unbounded right"
+                        "xMin": 4
+                        "color": "#0000ff"
+                      }
+                    ]
+                  }
+                ],
+                "giveUp": {
+                  "text": "If you look carefully, ...."
+                },
+                "confirmCorrect": {
+                  "text": "Four minutes into her run ...."
+                }
+              }
+            }
+          ]
+
+
+      describe 'when an incorrect point is clicked and check answer is clicked', ->
+
+        beforeEach ->
+          # TODO Enter incorrect answer!!!
+          # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+          integrationTestHelper.clickButton "Check My Answer"
+
+        it 'should show the first range visual prompt after the button is pressed', ->
+          data = integrationTestHelper.graphData()
+          highlightedPoints = data[0..2]
+          expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints, "#ff0000"
+
+        describe 'when an incorrect point is clicked again', ->
+
+          beforeEach ->
+            # TODO Enter incorrect answer!!!
+            # integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+            integrationTestHelper.clickButton "Check My Answer"
+
+          it 'should show the second two range visual prompts after the button is pressed', ->
+            data = integrationTestHelper.graphData()
+            highlightedPoints1 = data[0..2]
+            expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints1, "#00ff00"
+            highlightedPoints2 = data[3..4]
+            expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints2, "#0000ff"
