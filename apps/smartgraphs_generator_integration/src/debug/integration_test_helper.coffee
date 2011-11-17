@@ -115,8 +115,10 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
         for [dataX, dataY], i in dataPoints
           {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
           path += "#{if i == 0 then "M" else "L"}#{x},#{y}"
-
-        console.log "looking for #{this.actual} path[stroke='#{color}'][d='#{path}']"
         elements = $("#{this.actual} path[stroke='#{color}'][d='#{path}']")
-        console.log elements
+        elements.length > 0
+      toHaveTheCircledPoint: ([dataX, dataY], color) ->
+        graphView = Smartgraphs.activityPage.firstGraphPane.graphView
+        {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
+        elements = $("#{this.actual} circle[cx='#{x}'][cy='#{y}'][stroke='#{color}'][r='6']")
         elements.length > 0

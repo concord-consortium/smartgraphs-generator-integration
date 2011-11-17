@@ -147,9 +147,15 @@
             _ref2 = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref2.x, y = _ref2.y;
             path += "" + (i === 0 ? "M" : "L") + x + "," + y;
           }
-          console.log("looking for " + this.actual + " path[stroke='" + color + "'][d='" + path + "']");
           elements = $("" + this.actual + " path[stroke='" + color + "'][d='" + path + "']");
-          console.log(elements);
+          return elements.length > 0;
+        },
+        toHaveTheCircledPoint: function(_arg, color) {
+          var coords, dataX, dataY, elements, graphView, x, y, _ref;
+          dataX = _arg[0], dataY = _arg[1];
+          graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
+          _ref = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref.x, y = _ref.y;
+          elements = $("" + this.actual + " circle[cx='" + x + "'][cy='" + y + "'][stroke='" + color + "'][r='6']");
           return elements.length > 0;
         }
       });
