@@ -1,6 +1,7 @@
 (function() {
   var integrationTestHelper;
   var __hasProp = Object.prototype.hasOwnProperty;
+
   window.integrationTestHelper = integrationTestHelper = SC.Object.create({
     converter: require('./converter.js'),
     authoredConent: null,
@@ -161,4 +162,5 @@
       });
     }
   });
+
 }).call(this);

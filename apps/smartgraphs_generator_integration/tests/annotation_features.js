@@ -1,8 +1,10 @@
-(function() {
+
   defineJasmineHelpers();
+
   $(function() {
     return $('body').css('overflow', 'auto');
   });
+
   describe("The Smartgraphs runtime, when loading graph annotations converted from the authored format", function() {
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
@@ -185,4 +187,3 @@
       });
     });
   });
-}).call(this);
