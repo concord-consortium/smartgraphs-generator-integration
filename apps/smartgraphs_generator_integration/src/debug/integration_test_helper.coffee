@@ -61,6 +61,12 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
   graphData: ->
     integrationTestHelper.get('authoredContent').pages[0].panes[0].data
 
+  getGraphOrigin: ->
+    axes = $(".smartgraph-pane svg path[stroke='#aaaaaa']")
+    path = axes[0].getAttribute("d")
+    [x,y] = /^M(.*?)L.*/.exec(path)[1].split(",")
+    return [Math.floor(x), Math.floor(y)]
+
   NOOP: ->
 
   # SC.TreeControllers throw exceptions when their content is deleted, so delete observers before destroying records
@@ -121,4 +127,12 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
         graphView = Smartgraphs.activityPage.firstGraphPane.graphView
         {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
         elements = $("#{this.actual} circle[cx='#{x}'][cy='#{y}'][stroke='#{color}'][r='6']")
+        elements.length > 0
+      toHaveALineToAxis: ([dataX, dataY], axis, color) ->
+        color = "#aa0000"                                     # FIXME: Why is color not working in integ. test?
+        graphView = Smartgraphs.activityPage.firstGraphPane.graphView
+        {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
+        [originX, originY] = integrationTestHelper.getGraphOrigin()
+        [endX, endY] = if (axis is "x") then [x, originY] else [originX, y]
+        elements = $("#{this.actual} [d=M#{x},#{y}L#{endX},#{endY}][stroke='#{color}']")
         elements.length > 0

@@ -1,7 +1,6 @@
 (function() {
   var integrationTestHelper;
   var __hasProp = Object.prototype.hasOwnProperty;
-
   window.integrationTestHelper = integrationTestHelper = SC.Object.create({
     converter: require('./converter.js'),
     authoredConent: null,
@@ -58,6 +57,13 @@
     },
     graphData: function() {
       return integrationTestHelper.get('authoredContent').pages[0].panes[0].data;
+    },
+    getGraphOrigin: function() {
+      var axes, path, x, y, _ref;
+      axes = $(".smartgraph-pane svg path[stroke='#aaaaaa']");
+      path = axes[0].getAttribute("d");
+      _ref = /^M(.*?)L.*/.exec(path)[1].split(","), x = _ref[0], y = _ref[1];
+      return [Math.floor(x), Math.floor(y)];
     },
     NOOP: function() {},
     silentlyClobberRecords: function(store) {
@@ -158,9 +164,19 @@
           _ref = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref.x, y = _ref.y;
           elements = $("" + this.actual + " circle[cx='" + x + "'][cy='" + y + "'][stroke='" + color + "'][r='6']");
           return elements.length > 0;
+        },
+        toHaveALineToAxis: function(_arg, axis, color) {
+          var coords, dataX, dataY, elements, endX, endY, graphView, originX, originY, x, y, _ref, _ref2, _ref3;
+          dataX = _arg[0], dataY = _arg[1];
+          color = "#aa0000";
+          graphView = Smartgraphs.activityPage.firstGraphPane.graphView;
+          _ref = coords = graphView.coordinatesForPoint(dataX, dataY), x = _ref.x, y = _ref.y;
+          _ref2 = integrationTestHelper.getGraphOrigin(), originX = _ref2[0], originY = _ref2[1];
+          _ref3 = axis === "x" ? [x, originY] : [originX, y], endX = _ref3[0], endY = _ref3[1];
+          elements = $("" + this.actual + " [d=M" + x + "," + y + "L" + endX + "," + endY + "][stroke='" + color + "']");
+          return elements.length > 0;
         }
       });
     }
   });
-
 }).call(this);

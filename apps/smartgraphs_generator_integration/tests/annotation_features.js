@@ -1,10 +1,8 @@
-
+(function() {
   defineJasmineHelpers();
-
   $(function() {
     return $('body').css('overflow', 'auto');
   });
-
   describe("The Smartgraphs runtime, when loading graph annotations converted from the authored format", function() {
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
@@ -104,7 +102,7 @@
         });
       });
     });
-    return describe("with circled-point visual prompts", function() {
+    describe("with circled-point visual prompts", function() {
       beforeEach(function() {
         return integrationTestHelper.startAppWithContent({
           "type": "Activity",
@@ -186,4 +184,90 @@
         });
       });
     });
+    return describe("with line-to-axis visual prompts", function() {
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Pick A Point Sequence",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "in this activity....",
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane",
+                  "title": "Position vs. Time",
+                  "yLabel": "Position",
+                  "yMin": 0,
+                  "yMax": 2000,
+                  "yTicks": 10,
+                  "xLabel": "Time",
+                  "xMin": 0,
+                  "xMax": 10,
+                  "xTicks": 10,
+                  "data": [[1, 200], [2, 400], [3, 600], [4, 800], [5, 1000]]
+                }, {
+                  "type": "TablePane"
+                }
+              ],
+              "sequence": {
+                "type": "PickAPointSequence",
+                "initialPrompt": {
+                  "text": "Click the point...",
+                  "visualPrompts": [
+                    {
+                      "type": "PointAxisLineVisualPrompt",
+                      "name": "1 to 2",
+                      "point": [4, 800],
+                      "color": "green",
+                      "axis": "x_axis"
+                    }
+                  ]
+                },
+                "correctAnswerPoint": [4, 800],
+                "hints": [],
+                "giveUp": {
+                  "text": "If you look carefully, ....",
+                  "visualPrompts": [
+                    {
+                      "type": "PointAxisLineVisualPrompt",
+                      "name": "1 to 2",
+                      "point": [3, 600],
+                      "color": "#00ff00",
+                      "axis": "y_axis"
+                    }, {
+                      "type": "PointAxisLineVisualPrompt",
+                      "name": "1 to 2",
+                      "point": [5, 1000],
+                      "color": "blue",
+                      "axis": "x_axis"
+                    }
+                  ]
+                },
+                "confirmCorrect": {
+                  "text": "Four minutes into her run ...."
+                }
+              }
+            }
+          ]
+        });
+      });
+      describe('when the initial step is loaded', function() {
+        return it('should show the first range visual prompt', function() {
+          return expect("" + aSmartgraphPane + " svg").toHaveALineToAxis([4, 800], "x", "#ff0000");
+        });
+      });
+      return describe('when an incorrect point is clicked', function() {
+        beforeEach(function() {
+          integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [1, 200]);
+          return integrationTestHelper.clickButton("Check My Answer");
+        });
+        return it('should show the two give-up range visual prompts', function() {
+          expect("" + aSmartgraphPane + " svg").toHaveALineToAxis([3, 600], "y", "#00ff00");
+          return expect("" + aSmartgraphPane + " svg").toHaveALineToAxis([5, 1000], "x", "#0000ff");
+        });
+      });
+    });
   });
+}).call(this);
