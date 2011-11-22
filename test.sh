@@ -42,4 +42,4 @@ rm -rf results
 # don't abort on first error
 set +e
 
-./hudson.rb -t "apps/smartgraphs_generator_integration" -o results -p "sc-server" -i
+bundle exec ./hudson.rb -t "apps/smartgraphs_generator_integration" -o results -p "sc-server" -i
