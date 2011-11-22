@@ -1,10 +1,8 @@
-
+(function() {
   defineJasmineHelpers();
-
   $(function() {
     return $('body').css('overflow', 'auto');
   });
-
   describe("The Smartgraphs runtime, when loading sequences converted from the authored format", function() {
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
@@ -229,7 +227,7 @@
         });
       });
     });
-    return describe("when the authored content specifies a numeric sequence", function() {
+    describe("when the authored content specifies a numeric sequence", function() {
       describe("with one page", function() {
         beforeEach(function() {
           return integrationTestHelper.startAppWithContent({
@@ -413,4 +411,73 @@
         });
       });
     });
+    return describe("when the authored content specifies a constructed response sequence", function() {
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Maria's Run",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "In this activity....",
+              "panes": [
+                {
+                  "type": "ImagePane",
+                  "name": "Shoes",
+                  "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg",
+                  "license": "Creative Commons BY-NC-ND 2.0",
+                  "attribution": "image courtesy flickr user altopower"
+                }
+              ],
+              "sequence": {
+                "type": "ConstructedResponseSequence",
+                "initialPrompt": "What is your name?",
+                "initialContent": ""
+              }
+            }, {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "In this activity....",
+              "panes": [
+                {
+                  "type": "ImagePane",
+                  "name": "Shoes",
+                  "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg",
+                  "license": "Creative Commons BY-NC-ND 2.0",
+                  "attribution": "image courtesy flickr user altopower"
+                }
+              ],
+              "sequence": {
+                "type": "ConstructedResponseSequence",
+                "initialPrompt": "What is your name, this time with initial content?",
+                "initialContent": "My name is..."
+              }
+            }
+          ]
+        });
+      });
+      it('should display the question in a dialog-text box', function() {
+        return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("What is your name?");
+      });
+      it('should display an input field with placeholder text', function() {
+        return expect("" + aSmartgraphPane + " .dialog-text textarea[placeholder='Enter your answer here...']").toBeVisible();
+      });
+      it('should display a disabled Next button', function() {
+        return expect('').toHaveTheDisabledButton("Next");
+      });
+      return describe("when some text is entered", function() {
+        beforeEach(function() {
+          return integrationTestHelper.typeTextIn(".dialog-text textarea", "test");
+        });
+        it('should display an enabled Next button', function() {
+          return expect('').toHaveTheEnabledButton("Next");
+        });
+        return it('should display the initial content in the next input field', function() {
+          integrationTestHelper.clickButton("Next");
+          return expect("" + aSmartgraphPane + " .dialog-text textarea").toHaveTheText("My name is...");
+        });
+      });
+    });
   });
+}).call(this);

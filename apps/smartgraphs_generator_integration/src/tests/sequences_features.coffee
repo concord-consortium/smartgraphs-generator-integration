@@ -434,3 +434,73 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
             expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints1, "#00ff00"
             highlightedPoints2 = data[3..4]
             expect("#{aSmartgraphPane} svg").toHaveTheOverlay highlightedPoints2, "#0000ff"
+
+  describe "when the authored content specifies a constructed response sequence", ->
+
+    beforeEach ->
+      integrationTestHelper.startAppWithContent
+        "type": "Activity"
+        "name": "Maria's Run"
+        "pages": [
+          {
+            "type": "Page"
+            "name": "Introduction"
+            "text": "In this activity...."
+            "panes": [
+              {
+                "type": "ImagePane"
+                "name": "Shoes"
+                "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg"
+                "license": "Creative Commons BY-NC-ND 2.0"
+                "attribution": "image courtesy flickr user altopower"
+              }
+            ],
+            "sequence": {
+              "type": "ConstructedResponseSequence"
+              "initialPrompt": "What is your name?"
+              "initialContent": ""
+            }
+          },
+          {
+            "type": "Page"
+            "name": "Introduction"
+            "text": "In this activity...."
+            "panes": [
+              {
+                "type": "ImagePane"
+                "name": "Shoes"
+                "url": "http://smartgraphs.concord.org/static/smartgraphs/en/current/resources/images/walking_path.jpg"
+                "license": "Creative Commons BY-NC-ND 2.0"
+                "attribution": "image courtesy flickr user altopower"
+              }
+            ],
+            "sequence": {
+              "type": "ConstructedResponseSequence"
+              "initialPrompt": "What is your name, this time with initial content?"
+              "initialContent": "My name is..."
+            }
+          }
+        ]
+
+    it 'should display the question in a dialog-text box', ->
+      expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "What is your name?"
+
+    it 'should display an input field with placeholder text', ->
+      expect("#{aSmartgraphPane} .dialog-text textarea[placeholder='Enter your answer here...']").toBeVisible()
+
+    it 'should display a disabled Next button', ->
+      expect('').toHaveTheDisabledButton "Next"
+
+    describe "when some text is entered", ->
+
+      beforeEach ->
+        integrationTestHelper.typeTextIn ".dialog-text textarea", "test"
+
+      it 'should display an enabled Next button', ->
+        expect('').toHaveTheEnabledButton "Next"
+
+      it 'should display the initial content in the next input field', ->
+        integrationTestHelper.clickButton "Next"
+        expect("#{aSmartgraphPane} .dialog-text textarea").toHaveTheText "My name is..."
+
+
