@@ -1,10 +1,8 @@
-
+(function() {
   defineJasmineHelpers();
-
   $(function() {
     return $('body').css('overflow', 'auto');
   });
-
   describe("The Smartgraphs runtime, when loading graphs and tables converted from the authored format", function() {
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
@@ -172,7 +170,7 @@
         });
       });
     });
-    return describe("when the authored content specifies a table", function() {
+    describe("when the authored content specifies a table", function() {
       var aTablePane;
       aTablePane = "" + aSmartgraphPane + " .smartgraph-table";
       return describe("with attached graph", function() {
@@ -241,4 +239,56 @@
         });
       });
     });
+    return describe("when the authored content specifies a prediction graph", function() {
+      return describe("on a single pane", function() {
+        beforeEach(function() {
+          return integrationTestHelper.startAppWithContent({
+            "type": "Activity",
+            "name": "Prediction Graph Activity",
+            "pages": [
+              {
+                "type": "Page",
+                "name": "Prediction graph page",
+                "text": "In this activity, you'll make a prediction",
+                "panes": [
+                  {
+                    "type": "PredictionGraphPane",
+                    "title": "Back and Forth",
+                    "yLabel": "Position",
+                    "yUnits": "Distance",
+                    "yMin": 0.0,
+                    "yMax": 5.0,
+                    "xLabel": "Time",
+                    "xUnits": "Time",
+                    "xMin": 0.0,
+                    "xMax": 20.0,
+                    "yTicks": 10.0,
+                    "xTicks": 10.0
+                  }
+                ]
+              }
+            ],
+            "units": [
+              {
+                "type": "Unit",
+                "name": "Time",
+                "abbreviation": "s"
+              }, {
+                "type": "Unit",
+                "name": "Distance",
+                "abbreviation": "m"
+              }
+            ]
+          });
+        });
+        it("should display a pane with an svg graph background", function() {
+          expect("" + aSmartgraphPane + " svg").toBeVisible();
+          return expect("" + aSmartgraphPane + " svg g rect").toExistNTimes(1);
+        });
+        return it("should display a disabled 'Reset' button", function() {
+          return expect("" + aSmartgraphPane).toHaveTheDisabledButton("Reset");
+        });
+      });
+    });
   });
+}).call(this);
