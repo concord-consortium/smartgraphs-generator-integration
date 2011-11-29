@@ -287,13 +287,37 @@
           expect("" + aSmartgraphPane + " svg").toBeVisible();
           return expect("" + aSmartgraphPane + " svg g rect").toExistNTimes(1);
         });
-        return it("should display a disabled 'Reset' button", function() {
+        it("should display a disabled 'Reset' button", function() {
           return expect("" + aSmartgraphPane).toHaveTheDisabledButton("Reset");
+        });
+        describe("the graph", function() {
+          var annotationsHolder;
+          annotationsHolder = null;
+          return beforeEach(function() {
+            annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder;
+            return it("should contain a zero-length path", function() {
+              return expect(annotationsHolder.$('path').attr('d')).toEqual("M0,0");
+            });
+          });
+        });
+        return describe("after the mouse is dragged across the graph", function() {
+          beforeEach(function() {
+            var inputArea;
+            inputArea = $("" + aSmartgraphPane + " svg g rect")[0];
+            integrationTestHelper.fireEvent(inputArea, 'mousedown', 10, 10);
+            integrationTestHelper.fireEvent(inputArea, 'mousemove', 20, 20);
+            return integrationTestHelper.fireEvent(inputArea, 'mouseup', 20, 20);
+          });
+          return it("should enable the 'Reset' button in the top pane", function() {
+            return expect("" + aSmartgraphPane).toHaveTheEnabledButton("Reset");
+          });
         });
       });
       return describe("on two panes", function() {
+        var theBottomPane, theTopPane;
+        theTopPane = theBottomPane = null;
         beforeEach(function() {
-          return integrationTestHelper.startAppWithContent({
+          integrationTestHelper.startAppWithContent({
             "type": "Activity",
             "name": "Prediction Graph 2-Step Activity",
             "pages": [
@@ -346,12 +370,86 @@
               }
             ]
           });
+          theTopPane = '#' + Smartgraphs.activityPage.splitPaneDataView.topPaneWrapper.$().attr('id');
+          return theBottomPane = '#' + Smartgraphs.activityPage.splitPaneDataView.bottomPaneWrapper.$().attr('id');
         });
         it("should display two panes with svg graph backgrounds", function() {
           return expect("" + aSmartgraphPane + " svg g rect").toExistNTimes(2);
         });
-        return it("should display a disabled 'Reset' button", function() {
-          return expect("" + aSmartgraphPane).toHaveTheDisabledButton("Reset");
+        it("should display a disabled 'Reset' button in the top pane", function() {
+          return expect("" + theTopPane).toHaveTheDisabledButton('Reset');
+        });
+        describe("the top graph", function() {
+          var annotationsHolder;
+          annotationsHolder = null;
+          return beforeEach(function() {
+            annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder;
+            return it("should contain a zero-length path", function() {
+              return expect(annotationsHolder.$('path').attr('d')).toEqual("M0,0");
+            });
+          });
+        });
+        return describe("after the mouse is dragged across the top graph", function() {
+          beforeEach(function() {
+            var inputArea;
+            inputArea = Smartgraphs.activityPage.firstGraphPane.$('svg g rect')[0];
+            integrationTestHelper.fireEvent(inputArea, 'mousedown', 10, 10);
+            integrationTestHelper.fireEvent(inputArea, 'mousemove', 20, 20);
+            return integrationTestHelper.fireEvent(inputArea, 'mouseup', 20, 20);
+          });
+          it("should enable the 'Reset' button in the top pane", function() {
+            return expect("" + theTopPane).toHaveTheEnabledButton("Reset");
+          });
+          describe("the top graph", function() {
+            var annotationsHolder;
+            annotationsHolder = null;
+            beforeEach(function() {
+              return annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder;
+            });
+            return it("should contain a no-longer-zero-length path", function() {
+              return expect(annotationsHolder.$('path').attr('d')).not.toEqual("M0,0");
+            });
+          });
+          return describe("after the 'OK' button is clicked", function() {
+            beforeEach(function() {
+              return integrationTestHelper.clickButton('OK');
+            });
+            it("should display a disabled 'Reset' button in the bottom pane", function() {
+              return expect("" + theBottomPane).toHaveTheDisabledButton('Reset');
+            });
+            describe("the bottom graph", function() {
+              var annotationsHolder;
+              annotationsHolder = null;
+              beforeEach(function() {
+                return annotationsHolder = Smartgraphs.activityPage.secondGraphPane.graphView.annotationsHolder;
+              });
+              return it("should contain a zero-length path", function() {
+                return expect(annotationsHolder.$('path').attr('d')).toEqual("M0,0");
+              });
+            });
+            return describe("and the mouse is dragged across the bottom graph", function() {
+              beforeEach(function() {
+                var inputArea;
+                inputArea = Smartgraphs.activityPage.secondGraphPane.$('svg g rect')[0];
+                integrationTestHelper.fireEvent(inputArea, 'mousedown', 10, 10);
+                integrationTestHelper.fireEvent(inputArea, 'mousemove', 20, 20);
+                return integrationTestHelper.fireEvent(inputArea, 'mouseup', 20, 20);
+              });
+              it("should display an enabled 'Reset' button in the bottom pane", function() {
+                return expect("" + theBottomPane).toHaveTheEnabledButton('Reset');
+              });
+              return describe("the bottom graph", function() {
+                var annotationsHolder;
+                annotationsHolder = null;
+                beforeEach(function() {
+                  return annotationsHolder = Smartgraphs.activityPage.secondGraphPane.graphView.annotationsHolder;
+                });
+                return it("should contain a no-longer-zero-length path", function() {
+                  return expect(annotationsHolder.$('path').attr('d')).not.toEqual("M0,0");
+                });
+              });
+            });
+          });
         });
       });
     });

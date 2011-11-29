@@ -45,6 +45,10 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
   clickButton: (text) ->
     this.simulateClickOnSelector ".sc-button-view:visible:contains('#{text}')"
 
+  fireEvent: (el, eventName, x, y) ->
+    offset = $(el).offset()
+    evt    = SC.Event.simulateEvent el, eventName, { pageX: offset.left + x, pageY: offset.top + y }
+    SC.Event.trigger el, eventName, evt
 
   clickPointAt: (selector, [dataX, dataY]) ->
     graphView = Smartgraphs.activityPage.firstGraphPane.graphView

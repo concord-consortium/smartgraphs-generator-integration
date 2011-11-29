@@ -290,10 +290,29 @@ describe "The Smartgraphs runtime, when loading graphs and tables converted from
       it "should display a disabled 'Reset' button", ->
         expect("#{aSmartgraphPane}").toHaveTheDisabledButton "Reset"
 
-      # it "should be able to draw on the graph", ->    # Hard to test. Necessary?
+      describe "the graph", ->
+        annotationsHolder = null
+        beforeEach ->
+          annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder
+
+          it "should contain a zero-length path", ->
+            expect( annotationsHolder.$('path').attr('d') ).toEqual "M0,0"
+
+      describe "after the mouse is dragged across the graph", ->
+        beforeEach ->
+          inputArea = $("#{aSmartgraphPane} svg g rect")[0]
+
+          integrationTestHelper.fireEvent inputArea, 'mousedown', 10, 10
+          integrationTestHelper.fireEvent inputArea, 'mousemove', 20, 20
+          integrationTestHelper.fireEvent inputArea, 'mouseup', 20, 20
+
+        it "should enable the 'Reset' button in the top pane", ->
+          expect("#{aSmartgraphPane}").toHaveTheEnabledButton "Reset"
 
 
     describe "on two panes", ->
+      theTopPane = theBottomPane = null
+
       beforeEach ->
         integrationTestHelper.startAppWithContent
           "type": "Activity",
@@ -350,12 +369,72 @@ describe "The Smartgraphs runtime, when loading graphs and tables converted from
             }
           ]
 
+        theTopPane    = '#' + Smartgraphs.activityPage.splitPaneDataView.topPaneWrapper.$().attr('id')
+        theBottomPane = '#' + Smartgraphs.activityPage.splitPaneDataView.bottomPaneWrapper.$().attr('id')
 
       it "should display two panes with svg graph backgrounds", ->
         expect("#{aSmartgraphPane} svg g rect").toExistNTimes(2)
 
-      it "should display a disabled 'Reset' button", ->
-        expect("#{aSmartgraphPane}").toHaveTheDisabledButton "Reset"
+      it "should display a disabled 'Reset' button in the top pane", ->
+        expect("#{theTopPane}").toHaveTheDisabledButton 'Reset'
 
-      # it "should be able to draw on the graph", ->    # FIXME: We need this to confirm the two-step sequence
+      describe "the top graph", ->
+        annotationsHolder = null
+        beforeEach ->
+          annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder
 
+          it "should contain a zero-length path", ->
+            expect( annotationsHolder.$('path').attr('d') ).toEqual "M0,0"
+
+      describe "after the mouse is dragged across the top graph", ->
+        beforeEach ->
+          inputArea = Smartgraphs.activityPage.firstGraphPane.$('svg g rect')[0]
+
+          integrationTestHelper.fireEvent inputArea, 'mousedown', 10, 10
+          integrationTestHelper.fireEvent inputArea, 'mousemove', 20, 20
+          integrationTestHelper.fireEvent inputArea, 'mouseup', 20, 20
+
+        it "should enable the 'Reset' button in the top pane", ->
+          expect("#{theTopPane}").toHaveTheEnabledButton "Reset"
+
+        describe "the top graph", ->
+          annotationsHolder = null
+          beforeEach ->
+            annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder
+
+          it "should contain a no-longer-zero-length path", ->
+            expect( annotationsHolder.$('path').attr('d') ).not.toEqual "M0,0"
+
+        describe "after the 'OK' button is clicked", ->
+          beforeEach ->
+            integrationTestHelper.clickButton 'OK'
+
+          it "should display a disabled 'Reset' button in the bottom pane", ->
+            expect("#{theBottomPane}").toHaveTheDisabledButton 'Reset'
+
+          describe "the bottom graph", ->
+            annotationsHolder = null
+            beforeEach ->
+              annotationsHolder = Smartgraphs.activityPage.secondGraphPane.graphView.annotationsHolder
+
+            it "should contain a zero-length path", ->
+              expect( annotationsHolder.$('path').attr('d') ).toEqual "M0,0"
+
+          describe "and the mouse is dragged across the bottom graph", ->
+            beforeEach ->
+              inputArea = Smartgraphs.activityPage.secondGraphPane.$('svg g rect')[0]
+
+              integrationTestHelper.fireEvent inputArea, 'mousedown', 10, 10
+              integrationTestHelper.fireEvent inputArea, 'mousemove', 20, 20
+              integrationTestHelper.fireEvent inputArea, 'mouseup', 20, 20
+
+            it "should display an enabled 'Reset' button in the bottom pane", ->
+              expect("#{theBottomPane}").toHaveTheEnabledButton 'Reset'
+
+            describe "the bottom graph", ->
+              annotationsHolder = null
+              beforeEach ->
+                annotationsHolder = Smartgraphs.activityPage.secondGraphPane.graphView.annotationsHolder
+
+              it "should contain a no-longer-zero-length path", ->
+                expect( annotationsHolder.$('path').attr('d') ).not.toEqual "M0,0"

@@ -41,6 +41,15 @@
     clickButton: function(text) {
       return this.simulateClickOnSelector(".sc-button-view:visible:contains('" + text + "')");
     },
+    fireEvent: function(el, eventName, x, y) {
+      var evt, offset;
+      offset = $(el).offset();
+      evt = SC.Event.simulateEvent(el, eventName, {
+        pageX: offset.left + x,
+        pageY: offset.top + y
+      });
+      return SC.Event.trigger(el, eventName, evt);
+    },
     clickPointAt: function(selector, _arg) {
       var coords, dataX, dataY, graphView, x, y, _ref;
       dataX = _arg[0], dataY = _arg[1];
