@@ -291,3 +291,71 @@ describe "The Smartgraphs runtime, when loading graphs and tables converted from
         expect("#{aSmartgraphPane}").toHaveTheDisabledButton "Reset"
 
       # it "should be able to draw on the graph", ->    # Hard to test. Necessary?
+
+
+    describe "on two panes", ->
+      beforeEach ->
+        integrationTestHelper.startAppWithContent
+          "type": "Activity",
+          "name": "Prediction Graph 2-Step Activity",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Prediction graph 2-step page",
+              "text": "In this activity, you'll make two predictions, one after the other",
+              "panes": [
+                {
+                  "type": "PredictionGraphPane",
+                  "title": "Back and Forth",
+                  "yLabel": "Position",
+                  "yUnits": "Distance",
+                  "yMin": 0.0,
+                  "yMax": 5.0,
+                  "xLabel": "Time",
+                  "xUnits": "Time",
+                  "xMin": 0.0,
+                  "xMax": 20.0,
+                  "yTicks": 10.0,
+                  "xTicks": 10.0,
+                  "predictionType": "continuous_curves"
+                },
+                {
+                  "type": "PredictionGraphPane",
+                  "title": "Back and Forth 2",
+                  "yLabel": "Position",
+                  "yUnits": "Distance",
+                  "yMin": 0.0,
+                  "yMax": 5.0,
+                  "xLabel": "Time",
+                  "xUnits": "Time",
+                  "xMin": 0.0,
+                  "xMax": 20.0,
+                  "yTicks": 10.0,
+                  "xTicks": 10.0,
+                  "predictionType": "continuous_curves"
+                }
+              ]
+            }
+          ],
+          "units": [
+            {
+              "type": "Unit",
+              "name": "Time",
+              "abbreviation": "s"
+            },
+            {
+              "type": "Unit",
+              "name": "Distance",
+              "abbreviation": "m"
+            }
+          ]
+
+
+      it "should display two panes with svg graph backgrounds", ->
+        expect("#{aSmartgraphPane} svg g rect").toExistNTimes(2)
+
+      it "should display a disabled 'Reset' button", ->
+        expect("#{aSmartgraphPane}").toHaveTheDisabledButton "Reset"
+
+      # it "should be able to draw on the graph", ->    # FIXME: We need this to confirm the two-step sequence
+
