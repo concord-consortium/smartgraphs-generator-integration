@@ -116,7 +116,7 @@
         it("should enable the 'Reset' button in the top pane", function() {
           return expect("" + aSmartgraphPane).toHaveTheEnabledButton("Reset");
         });
-        it("should contain a no-longer-zero-length path in the annotations holder", function() {
+        it("should contain a no-longer-zero-length prediction-graph path", function() {
           var annotationsHolder;
           annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder;
           pathString = annotationsHolder.$('path').attr('d');
@@ -129,7 +129,7 @@
           it("should attempt to append a sensor applet", function() {
             return expect(Smartgraphs.sensorAppletController.append).toHaveBeenCalled();
           });
-          return it("should contain the same non-zero-length path in the annotations holder", function() {
+          return it("should contain the same non-zero-length prediction-graph path created in the first page", function() {
             var annotationsHolder;
             annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder;
             return expect(annotationsHolder.$('path').attr('d')).toEqual(pathString);

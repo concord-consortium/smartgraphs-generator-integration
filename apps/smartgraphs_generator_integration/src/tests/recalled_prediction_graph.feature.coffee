@@ -113,10 +113,10 @@ describe "The Smartgraphs runtime, when loading graphs and tables converted from
       it "should enable the 'Reset' button in the top pane", ->
         expect("#{aSmartgraphPane}").toHaveTheEnabledButton "Reset"
 
-      it "should contain a no-longer-zero-length prediction-graph path"
-          annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder
-          pathString = annotationsHolder.$('path').attr('d')
-          expect(pathString).not.toEqual "M0,0"
+      it "should contain a no-longer-zero-length prediction-graph path", ->
+        annotationsHolder = Smartgraphs.activityPage.firstGraphPane.graphView.annotationsHolder
+        pathString = annotationsHolder.$('path').attr('d')
+        expect(pathString).not.toEqual "M0,0"
 
       describe "and the 'Next' button is clicked", ->
         beforeEach ->
