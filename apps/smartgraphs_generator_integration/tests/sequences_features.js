@@ -1,10 +1,8 @@
-
+(function() {
   defineJasmineHelpers();
-
   $(function() {
     return $('body').css('overflow', 'auto');
   });
-
   describe("The Smartgraphs runtime, when loading sequences converted from the authored format", function() {
     var aSmartgraphPane;
     aSmartgraphPane = '.smartgraph-pane';
@@ -119,6 +117,81 @@
         return describe('when the correct point is clicked and the button is pressed', function() {
           beforeEach(function() {
             integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [4, 800]);
+            return integrationTestHelper.clickButton("Check My Answer");
+          });
+          return it('should show the final step', function() {
+            return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Four minutes into her run ....");
+          });
+        });
+      });
+      describe("with a range input", function() {
+        beforeEach(function() {
+          return integrationTestHelper.startAppWithContent({
+            "type": "Activity",
+            "name": "Pick A Point Sequence",
+            "pages": [
+              {
+                "type": "Page",
+                "name": "Introduction",
+                "text": "in this activity....",
+                "panes": [
+                  {
+                    "type": "PredefinedGraphPane",
+                    "title": "Position vs. Time",
+                    "yLabel": "Position",
+                    "yMin": 0,
+                    "yMax": 2000,
+                    "yTicks": 10,
+                    "xLabel": "Time",
+                    "xMin": 0,
+                    "xMax": 10,
+                    "xTicks": 10,
+                    "data": [[1, 200], [2, 400], [3, 600], [4, 800]]
+                  }, {
+                    "type": "TablePane"
+                  }
+                ],
+                "sequence": {
+                  "type": "PickAPointSequence",
+                  "initialPrompt": "Click the point...",
+                  "correctAnswerRange": {
+                    "xMin": 2,
+                    "yMin": 400,
+                    "xMax": 3,
+                    "yMax": 600
+                  },
+                  "giveUp": {
+                    "text": "If you look carefully, ...."
+                  },
+                  "confirmCorrect": {
+                    "text": "Four minutes into her run ...."
+                  }
+                }
+              }
+            ]
+          });
+        });
+        describe('when an incorrect point is clicked and the button is pressed', function() {
+          beforeEach(function() {
+            integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [1, 200]);
+            return integrationTestHelper.clickButton("Check My Answer");
+          });
+          return it('should show the giveup step after ', function() {
+            return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("If you look carefully, ....");
+          });
+        });
+        describe('when a correct point is clicked and the button is pressed', function() {
+          beforeEach(function() {
+            integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [2, 400]);
+            return integrationTestHelper.clickButton("Check My Answer");
+          });
+          return it('should show the final step', function() {
+            return expect("" + aSmartgraphPane + " .dialog-text").toHaveTheText("Four minutes into her run ....");
+          });
+        });
+        return describe('when a different correct point is clicked and the button is pressed', function() {
+          beforeEach(function() {
+            integrationTestHelper.clickPointAt("" + aSmartgraphPane + " svg", [3, 600]);
             return integrationTestHelper.clickButton("Check My Answer");
           });
           return it('should show the final step', function() {
@@ -482,3 +555,4 @@
       });
     });
   });
+}).call(this);

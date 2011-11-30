@@ -129,6 +129,86 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
         it 'should show the final step', ->
           expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Four minutes into her run ...."
 
+    describe "with a range input", ->
+
+      beforeEach ->
+        integrationTestHelper.startAppWithContent
+          "type": "Activity",
+          "name": "Pick A Point Sequence",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "in this activity....",
+              "panes": [
+                {
+                  "type": "PredefinedGraphPane",
+                  "title": "Position vs. Time",
+                  "yLabel": "Position",
+                  "yMin": 0,
+                  "yMax": 2000,
+                  "yTicks": 10,
+                  "xLabel": "Time",
+                  "xMin": 0,
+                  "xMax": 10,
+                  "xTicks": 10,
+                  "data": [
+                    [1,200],
+                    [2,400],
+                    [3,600],
+                    [4,800]
+                  ]
+                },
+                {
+                  "type": "TablePane"
+                }
+              ],
+              "sequence": {
+                "type": "PickAPointSequence",
+                "initialPrompt": "Click the point...",
+                "correctAnswerRange": {
+                  "xMin": 2,
+                  "yMin": 400,
+                  "xMax": 3,
+                  "yMax": 600
+                },
+                "giveUp": {
+                  "text": "If you look carefully, ...."
+                },
+                "confirmCorrect": {
+                  "text": "Four minutes into her run ...."
+                }
+              }
+            }
+          ]
+
+      describe 'when an incorrect point is clicked and the button is pressed', ->
+
+        beforeEach ->
+          integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [1, 200])
+          integrationTestHelper.clickButton "Check My Answer"
+
+        it 'should show the giveup step after ', ->
+          expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "If you look carefully, ...."
+
+      describe 'when a correct point is clicked and the button is pressed', ->
+
+        beforeEach ->
+          integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [2, 400])
+          integrationTestHelper.clickButton "Check My Answer"
+
+        it 'should show the final step', ->
+          expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Four minutes into her run ...."
+
+      describe 'when a different correct point is clicked and the button is pressed', ->
+
+        beforeEach ->
+          integrationTestHelper.clickPointAt("#{aSmartgraphPane} svg", [3, 600])
+          integrationTestHelper.clickButton "Check My Answer"
+
+        it 'should show the final step', ->
+          expect("#{aSmartgraphPane} .dialog-text").toHaveTheText "Four minutes into her run ...."
+
     describe "with range visual prompts", ->
 
       beforeEach ->
