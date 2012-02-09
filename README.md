@@ -28,13 +28,13 @@ To get started:
   * You should now be able to run `bin/sc-server` in the root of the project
   * `open http://localhost:4020/static/smartgraphs_generator_integration/en/current/tests.html` to see the test results.
 
-Set up jitter to watch for coffeescript changes:
+Have CoffeeScript watch for source file changes:
 
- * Install node
- * Install jitter (note: you might want to learn more about npm so you know what this command is doing)
-    * `sudo npm install --global jitter`
- * run jitter to watch that folder and compile to the parent
-    * `jitter apps/smartgraphs_generator_integration/src apps/smartgraphs_generator_integration`
+ * Install node ( >= v0.6)
+ * Install the CoffeeScript package ( >= 1.2.0) if you haven't already (note: you might want to learn more about npm so you know what this command is doing)
+    * `npm install -g coffee-script`
+ * Tell CoffeeScript to watch the source folder for changes:
+    * `coffee -o apps/smartgraphs_generator_integration -wc apps/smartgraphs_generator_integration/src`
 
 Git-committed symlinks (handy to know about if you are developing on Windows:)
 
