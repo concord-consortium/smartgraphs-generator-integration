@@ -1,3 +1,4 @@
+(function() {
 
   defineJasmineHelpers();
 
@@ -186,3 +187,5 @@
       });
     });
   });
+
+}).call(this);
