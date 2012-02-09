@@ -4,7 +4,7 @@
 
   window.integrationTestHelper = integrationTestHelper = SC.Object.create({
     converter: require('./converter.js'),
-    authoredConent: null,
+    authoredContent: null,
     startApp: function() {
       SC.RunLoop.begin();
       Smartgraphs.statechart.set('trace', NO);

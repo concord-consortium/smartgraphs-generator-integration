@@ -2,7 +2,7 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
 
   converter: require './converter.js'
 
-  authoredConent: null
+  authoredContent: null
 
   startApp: ->
     # Run the full app main method which would normally happen on page load
