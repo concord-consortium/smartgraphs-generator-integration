@@ -41,6 +41,9 @@
     clickButton: function(text) {
       return this.simulateClickOnSelector(".sc-button-view:visible:contains('" + text + "')");
     },
+    clickRadioButton: function(text) {
+      return this.simulateClickOnSelector(".sc-radio-button:visible:contains('" + text + "')");
+    },
     fireEvent: function(el, eventName, x, y) {
       var evt, offset;
       offset = $(el).offset();
@@ -107,6 +110,27 @@
         toHaveTheEnabledButton: function(text) {
           var elements;
           elements = $("" + this.actual + " .sc-button-view:not(.disabled):visible:contains('" + text + "')");
+          return elements.length > 0;
+        },
+        toHaveTheRadioButton: function(text) {
+          var elements;
+          elements = $("" + this.actual + " .sc-radio-button:not(.disabled):visible:contains('" + text + "')");
+          return elements.length > 0;
+        },
+        toHaveTheSelectedRadioButton: function(text) {
+          var elements;
+          elements = $("" + this.actual + " .sc-radio-button.sel:not(.disabled):visible:contains('" + text + "')");
+          return elements.length > 0;
+        },
+        toHaveTheUnselectedRadioButton: function(text) {
+          var elements;
+          elements = $("" + this.actual + " .sc-radio-button:not(.sel):not(.disabled):visible:contains('" + text + "')");
+          if (elements.length === 0) debugger;
+          return elements.length > 0;
+        },
+        toHaveRadioButtons: function() {
+          var elements;
+          elements = $("" + this.actual + " .sc-radio-button:visible");
           return elements.length > 0;
         },
         toBeEmpty2: function() {

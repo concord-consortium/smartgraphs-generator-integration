@@ -44,6 +44,9 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
 
   clickButton: (text) ->
     this.simulateClickOnSelector ".sc-button-view:visible:contains('#{text}')"
+    
+  clickRadioButton: (text) ->
+    this.simulateClickOnSelector ".sc-radio-button:visible:contains('#{text}')"
 
   fireEvent: (el, eventName, x, y) ->
     offset = $(el).offset()
@@ -96,6 +99,19 @@ window.integrationTestHelper = integrationTestHelper = SC.Object.create
         elements.length > 0
       toHaveTheEnabledButton: (text) ->
         elements = $("#{this.actual} .sc-button-view:not(.disabled):visible:contains('#{text}')")
+        elements.length > 0
+      toHaveTheRadioButton: (text) ->
+        elements = $("#{this.actual} .sc-radio-button:not(.disabled):visible:contains('#{text}')")
+        elements.length > 0
+      toHaveTheSelectedRadioButton: (text) ->
+        elements = $("#{this.actual} .sc-radio-button.sel:not(.disabled):visible:contains('#{text}')")
+        elements.length > 0        
+      toHaveTheUnselectedRadioButton: (text) ->
+        elements = $("#{this.actual} .sc-radio-button:not(.sel):not(.disabled):visible:contains('#{text}')")
+        if elements.length is 0 then debugger
+        elements.length > 0
+      toHaveRadioButtons: ->
+        elements = $("#{this.actual} .sc-radio-button:visible")
         elements.length > 0
       toBeEmpty2: ->
         this.actual.length == 0
