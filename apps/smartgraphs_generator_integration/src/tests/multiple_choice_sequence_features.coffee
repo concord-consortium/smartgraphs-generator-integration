@@ -30,12 +30,10 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
               "Choice C"
             ]
             "correctAnswerIndex": 1
-            "giveUp": {
+            "giveUp":
               "text": "<p>Incorrect. The correct choice B is choice B.</p>"
-            }
-            "confirmCorrect": {
+            "confirmCorrect":
               "text": "<p>That's right. I wanted choice B, you gave it to me.</p>"
-            }
             "hints": [
                 "name": "Hint 1"
                 "text": "<p>You can try harder than that.</p>"
