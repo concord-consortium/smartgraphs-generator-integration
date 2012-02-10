@@ -107,4 +107,62 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
         itShouldDisplayAnswerablePrompt "<p>I'm starting to worry about you.</p>"
         afterChoosing "Choice B", itShouldDisplayConfirmationText
         afterChoosing "Choice A", "Choice C", itShouldDisplayGiveUpText
+        
+        
+  describe "when the authored content specifies a multiple choice sequence with custom hints", ->
+    beforeEach ->
+      integrationTestHelper.startAppWithContent
+        "type": "Activity"
+        "name": "Multiple Choice 2"
+        "pages": [
+          "type": "Page"
+          "name": "First Page"
+          "text": "<p>This is an example page.</p>"
+          "panes": []
+          "sequence":
+            "type": "MultipleChoiceWithCustomHintsSequence"
+            "initialPrompt": "<p>Which of the following choices is choice \"B\"?</p>"
+            "choices": [
+              "Choice A"
+              "Choice B"
+              "Choice C"
+            ]
+            "correctAnswerIndex": 1
+            "confirmCorrect":
+              "text": "<p>That's right. I wanted choice B, you gave it to me.</p>"
+            "hints": [
+                "name": "Choice A Hint"
+                "choiceIndex": 0
+                "text": "<p>Try to think of B, not A.</p>"
+              ,
+                "name": "Choice C Hint"
+                "choiceIndex": 2
+                "text": "<p>Now, really. C?</p>"
+            ]
+        ]
+        
+    # helpers for this describe
+    itShouldBeAnswerable = ->
+      itShouldHaveAnswerableChoices "Choice A", "Choice B", "Choice C"
+
+    itShouldDisplayAnswerablePrompt = (text) ->
+      itShouldBeAnswerable()
+      itShouldHaveText text
+
+    itShouldDisplayConfirmationText = ->
+      itShouldBeNonanswerable
+      itShouldHaveText "<p>That's right. I wanted choice B, you gave it to me.</p>"
     
+    itShouldResponseToChoiceAndThen = (test) ->
+      afterChoosing "Choice B", itShouldDisplayConfirmationText
+      afterChoosing "Choice A", ->
+        itShouldDisplayAnswerablePrompt "<p>Try to think of B, not A.</p>"
+        test?()     
+      afterChoosing "Choice C", ->
+        itShouldDisplayAnswerablePrompt "<p>Now, really. C?</p>"
+        test?()
+
+    # the actual tests for this describe
+    itShouldDisplayAnswerablePrompt "<p>Which of the following choices is choice \"B\"?</p>"
+    itShouldResponseToChoiceAndThen -> itShouldResponseToChoiceAndThen(null)
+            

@@ -66,7 +66,7 @@
         return expect(theDialogText).toHaveTheText(text);
       });
     };
-    return describe("when the authored content specifies a multiple-choice sequence with sequential hints", function() {
+    describe("when the authored content specifies a multiple-choice sequence with sequential hints", function() {
       var itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldDisplayGiveUpText;
       beforeEach(function() {
         return integrationTestHelper.startAppWithContent({
@@ -126,6 +126,68 @@
           afterChoosing("Choice B", itShouldDisplayConfirmationText);
           return afterChoosing("Choice A", "Choice C", itShouldDisplayGiveUpText);
         });
+      });
+    });
+    return describe("when the authored content specifies a multiple choice sequence with custom hints", function() {
+      var itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldResponseToChoiceAndThen;
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Multiple Choice 2",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "First Page",
+              "text": "<p>This is an example page.</p>",
+              "panes": [],
+              "sequence": {
+                "type": "MultipleChoiceWithCustomHintsSequence",
+                "initialPrompt": "<p>Which of the following choices is choice \"B\"?</p>",
+                "choices": ["Choice A", "Choice B", "Choice C"],
+                "correctAnswerIndex": 1,
+                "confirmCorrect": {
+                  "text": "<p>That's right. I wanted choice B, you gave it to me.</p>"
+                },
+                "hints": [
+                  {
+                    "name": "Choice A Hint",
+                    "choiceIndex": 0,
+                    "text": "<p>Try to think of B, not A.</p>"
+                  }, {
+                    "name": "Choice C Hint",
+                    "choiceIndex": 2,
+                    "text": "<p>Now, really. C?</p>"
+                  }
+                ]
+              }
+            }
+          ]
+        });
+      });
+      itShouldBeAnswerable = function() {
+        return itShouldHaveAnswerableChoices("Choice A", "Choice B", "Choice C");
+      };
+      itShouldDisplayAnswerablePrompt = function(text) {
+        itShouldBeAnswerable();
+        return itShouldHaveText(text);
+      };
+      itShouldDisplayConfirmationText = function() {
+        itShouldBeNonanswerable;        return itShouldHaveText("<p>That's right. I wanted choice B, you gave it to me.</p>");
+      };
+      itShouldResponseToChoiceAndThen = function(test) {
+        afterChoosing("Choice B", itShouldDisplayConfirmationText);
+        afterChoosing("Choice A", function() {
+          itShouldDisplayAnswerablePrompt("<p>Try to think of B, not A.</p>");
+          return typeof test === "function" ? test() : void 0;
+        });
+        return afterChoosing("Choice C", function() {
+          itShouldDisplayAnswerablePrompt("<p>Now, really. C?</p>");
+          return typeof test === "function" ? test() : void 0;
+        });
+      };
+      itShouldDisplayAnswerablePrompt("<p>Which of the following choices is choice \"B\"?</p>");
+      return itShouldResponseToChoiceAndThen(function() {
+        return itShouldResponseToChoiceAndThen(null);
       });
     });
   });
