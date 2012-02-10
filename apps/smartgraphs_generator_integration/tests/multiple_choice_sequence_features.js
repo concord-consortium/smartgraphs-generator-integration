@@ -16,7 +16,7 @@
     afterEach(function() {
       return integrationTestHelper.teardownApp();
     });
-    return describe("when the authored content specifies an multiple-choice sequence with sequential hints", function() {
+    return describe("when the authored content specifies a multiple-choice sequence with sequential hints", function() {
       var afterChoosing, itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldDisplayGiveUpText, itShouldNotBeAnswerable, theDialogText;
       beforeEach(function() {
         return integrationTestHelper.startAppWithContent({

@@ -11,7 +11,7 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
   afterEach ->
     integrationTestHelper.teardownApp()
 
-  describe "when the authored content specifies an multiple-choice sequence with sequential hints", ->
+  describe "when the authored content specifies a multiple-choice sequence with sequential hints", ->
     beforeEach ->
       integrationTestHelper.startAppWithContent
         "type": "Activity"
