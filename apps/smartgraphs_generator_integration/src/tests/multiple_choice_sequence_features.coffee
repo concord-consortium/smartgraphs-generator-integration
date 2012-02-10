@@ -153,7 +153,7 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
       itShouldBeNonanswerable
       itShouldHaveText "<p>That's right. I wanted choice B, you gave it to me.</p>"
     
-    itShouldResponseToChoiceAndThen = (test) ->
+    itShouldRespondToChoiceAndThen = (test) ->
       afterChoosing "Choice B", itShouldDisplayConfirmationText
       afterChoosing "Choice A", ->
         itShouldDisplayAnswerablePrompt "<p>Try to think of B, not A.</p>"
@@ -164,5 +164,5 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
 
     # the actual tests for this describe
     itShouldDisplayAnswerablePrompt "<p>Which of the following choices is choice \"B\"?</p>"
-    itShouldResponseToChoiceAndThen -> itShouldResponseToChoiceAndThen(null)
+    itShouldRespondToChoiceAndThen -> itShouldRespondToChoiceAndThen(null)
             

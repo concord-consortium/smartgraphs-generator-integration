@@ -129,7 +129,7 @@
       });
     });
     return describe("when the authored content specifies a multiple choice sequence with custom hints", function() {
-      var itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldResponseToChoiceAndThen;
+      var itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldRespondToChoiceAndThen;
       beforeEach(function() {
         return integrationTestHelper.startAppWithContent({
           "type": "Activity",
@@ -174,7 +174,7 @@
       itShouldDisplayConfirmationText = function() {
         itShouldBeNonanswerable;        return itShouldHaveText("<p>That's right. I wanted choice B, you gave it to me.</p>");
       };
-      itShouldResponseToChoiceAndThen = function(test) {
+      itShouldRespondToChoiceAndThen = function(test) {
         afterChoosing("Choice B", itShouldDisplayConfirmationText);
         afterChoosing("Choice A", function() {
           itShouldDisplayAnswerablePrompt("<p>Try to think of B, not A.</p>");
@@ -186,8 +186,8 @@
         });
       };
       itShouldDisplayAnswerablePrompt("<p>Which of the following choices is choice \"B\"?</p>");
-      return itShouldResponseToChoiceAndThen(function() {
-        return itShouldResponseToChoiceAndThen(null);
+      return itShouldRespondToChoiceAndThen(function() {
+        return itShouldRespondToChoiceAndThen(null);
       });
     });
   });
