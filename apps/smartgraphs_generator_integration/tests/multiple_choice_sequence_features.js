@@ -8,16 +8,66 @@
   });
 
   describe("The Smartgraphs runtime, when loading sequences converted from the authored format", function() {
-    var aSmartgraphPane;
-    aSmartgraphPane = '.smartgraph-pane';
+    var aSmartgraphPane, afterChoosing, itShouldBeNonanswerable, itShouldHaveAnswerableChoices, itShouldHaveText, theDialogText;
     beforeEach(function() {
       return integrationTestHelper.addMatchers(this);
     });
     afterEach(function() {
       return integrationTestHelper.teardownApp();
     });
+    aSmartgraphPane = '.smartgraph-pane';
+    theDialogText = "" + aSmartgraphPane + " .dialog-text";
+    afterChoosing = function() {
+      var choice, choices, test, _i, _j, _len;
+      choices = 2 <= arguments.length ? __slice.call(arguments, 0, _i = arguments.length - 1) : (_i = 0, []), test = arguments[_i++];
+      for (_j = 0, _len = choices.length; _j < _len; _j++) {
+        choice = choices[_j];
+        describe("after clicking " + choice, function() {
+          beforeEach(function() {
+            return integrationTestHelper.clickRadioButton(choice);
+          });
+          it("should enable the \"Check My Answer\" button", function() {
+            return expect(aSmartgraphPane).toHaveTheEnabledButton("Check My Answer");
+          });
+          return describe("after clicking the \"Check My Answer\" button", function() {
+            beforeEach(function() {
+              return integrationTestHelper.clickButton("Check My Answer");
+            });
+            return test();
+          });
+        });
+      }
+      return null;
+    };
+    itShouldHaveAnswerableChoices = function() {
+      var choice, choices, _i, _len;
+      choices = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      it("should have a disabled button \"Check My Answer\" button", function() {
+        return expect(aSmartgraphPane).toHaveTheDisabledButton("Check My Answer");
+      });
+      for (_i = 0, _len = choices.length; _i < _len; _i++) {
+        choice = choices[_i];
+        it("should contain an (unselected) radio button labeled \"" + choice + "\"", function() {
+          return expect(theDialogText).toHaveTheUnselectedRadioButton(choice);
+        });
+      }
+      return null;
+    };
+    itShouldBeNonanswerable = function() {
+      it("should not have any radio buttons", function() {
+        return expect(theDialogText).not.toHaveRadioButtons();
+      });
+      return it("should not have a \"Check My Answer\" button", function() {
+        return expect(theDialogText).not.toHaveTheButton("Check My Answer");
+      });
+    };
+    itShouldHaveText = function(text) {
+      return it("should display the text, \"" + text + "\"", function() {
+        return expect(theDialogText).toHaveTheText(text);
+      });
+    };
     return describe("when the authored content specifies a multiple-choice sequence with sequential hints", function() {
-      var afterChoosing, itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldDisplayGiveUpText, itShouldNotBeAnswerable, theDialogText;
+      var itShouldBeAnswerable, itShouldDisplayAnswerablePrompt, itShouldDisplayConfirmationText, itShouldDisplayGiveUpText;
       beforeEach(function() {
         return integrationTestHelper.startAppWithContent({
           "type": "Activity",
@@ -53,68 +103,18 @@
           ]
         });
       });
-      theDialogText = "" + aSmartgraphPane + " .dialog-text";
-      afterChoosing = function() {
-        var choice, choices, test, _i, _j, _len;
-        choices = 2 <= arguments.length ? __slice.call(arguments, 0, _i = arguments.length - 1) : (_i = 0, []), test = arguments[_i++];
-        for (_j = 0, _len = choices.length; _j < _len; _j++) {
-          choice = choices[_j];
-          describe("after clicking " + choice, function() {
-            beforeEach(function() {
-              return integrationTestHelper.clickRadioButton(choice);
-            });
-            it("should enable the \"Check My Answer\" button", function() {
-              return expect(aSmartgraphPane).toHaveTheEnabledButton("Check My Answer");
-            });
-            return describe("after clicking the \"Check My Answer\" button", function() {
-              beforeEach(function() {
-                return integrationTestHelper.clickButton("Check My Answer");
-              });
-              return test();
-            });
-          });
-        }
-        return null;
-      };
       itShouldBeAnswerable = function() {
-        it("should contain an (unselected) radio button labeled \"Choice A\"", function() {
-          return expect(theDialogText).toHaveTheUnselectedRadioButton("Choice A");
-        });
-        it("should contain an (unselected) radio button labeled \"Choice B\"", function() {
-          return expect(theDialogText).toHaveTheUnselectedRadioButton("Choice B");
-        });
-        it("should contain an (unselected) radio button labeled \"Choice C\"", function() {
-          return expect(theDialogText).toHaveTheUnselectedRadioButton("Choice C");
-        });
-        return it("should have a disabled button \"Check My Answer\" button", function() {
-          return expect(aSmartgraphPane).toHaveTheDisabledButton("Check My Answer");
-        });
+        return itShouldHaveAnswerableChoices("Choice A", "Choice B", "Choice C");
       };
-      itShouldNotBeAnswerable = function() {
-        it("should not have any radio buttons", function() {
-          return expect(theDialogText).not.toHaveRadioButtons();
-        });
-        return it("should not have a \"Check My Answer\" button", function() {
-          return expect(theDialogText).not.toHaveTheButton("Check My Answer");
-        });
+      itShouldDisplayAnswerablePrompt = function(text) {
+        itShouldBeAnswerable();
+        return itShouldHaveText(text);
       };
       itShouldDisplayConfirmationText = function() {
-        itShouldNotBeAnswerable();
-        return it("should display the confirmCorrect text", function() {
-          return expect(theDialogText).toHaveTheText("<p>That's right. I wanted choice B, you gave it to me.</p>");
-        });
+        itShouldBeNonanswerable;        return itShouldHaveText("<p>That's right. I wanted choice B, you gave it to me.</p>");
       };
       itShouldDisplayGiveUpText = function() {
-        itShouldNotBeAnswerable();
-        return it("should display the giveUp text", function() {
-          return expect(theDialogText).toHaveTheText("<p>Incorrect. The correct choice B is choice B.</p>");
-        });
-      };
-      itShouldDisplayAnswerablePrompt = function(promptText) {
-        itShouldBeAnswerable();
-        return it("should display the text, \"" + promptText + "\"", function() {
-          return expect(theDialogText).toHaveTheText(promptText);
-        });
+        itShouldBeNonanswerable;        return itShouldHaveText("<p>Incorrect. The correct choice B is choice B.</p>");
       };
       itShouldDisplayAnswerablePrompt("<p>Which of the following choices is choice \"B\"?</p>");
       afterChoosing("Choice B", itShouldDisplayConfirmationText);
