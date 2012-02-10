@@ -37,14 +37,11 @@ describe "The Smartgraphs runtime, when loading sequences converted from the aut
               "text": "<p>That's right. I wanted choice B, you gave it to me.</p>"
             }
             "hints": [
-              {
                 "name": "Hint 1"
                 "text": "<p>You can try harder than that.</p>"
-              }
-              {
+              ,
                 "name": "Hint 2"
                 "text": "<p>I'm starting to worry about you.</p>"
-              }
             ]
         ]
 
